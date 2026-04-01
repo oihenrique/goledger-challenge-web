@@ -10,12 +10,12 @@ import {
   updateAsset,
 } from '@/lib/api/gateway-client';
 import { allowMethod, handleApiError } from '@/lib/api/api-route';
-import { assetTypes, type AssetType } from '@/shared/types/api-common.types';
+import { assetTypes, type AssetType } from '@/shared/types';
 import {
   createHistoryRouteSchema,
   createReadRouteSchema,
   searchRouteSchema,
-} from '@/shared/schemas/api-route.schemas';
+} from '@/shared/schemas';
 
 interface DomainApiHandlerConfig {
   assetType: AssetType;

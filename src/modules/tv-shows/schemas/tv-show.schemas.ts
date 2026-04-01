@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { assetTypes } from '@/shared/types/api-common.types';
+import { assetTypes } from '@/shared/types';
 
 export const tvShowKeySchema = z.object({
   '@assetType': z.literal(assetTypes.tvShows),

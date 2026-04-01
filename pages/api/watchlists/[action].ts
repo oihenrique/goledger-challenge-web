@@ -4,7 +4,7 @@ import {
   updateWatchlistSchema,
   watchlistKeySchema,
 } from '@/modules/watchlists/schemas/watchlist.schemas';
-import { assetTypes } from '@/shared/types/api-common.types';
+import { assetTypes } from '@/shared/types';
 
 export default createDomainApiHandler({
   assetType: assetTypes.watchlist,

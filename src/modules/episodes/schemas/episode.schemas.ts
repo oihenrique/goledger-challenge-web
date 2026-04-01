@@ -3,8 +3,8 @@ import { z } from 'zod';
 import {
   isoDateTimeSchema,
   seasonReferenceSchema,
-} from '@/shared/schemas/api-reference.schemas';
-import { assetTypes } from '@/shared/types/api-common.types';
+} from '@/shared/schemas';
+import { assetTypes } from '@/shared/types';
 
 export const episodeKeySchema = z.object({
   '@assetType': z.literal(assetTypes.episodes),

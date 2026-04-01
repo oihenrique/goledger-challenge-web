@@ -4,7 +4,7 @@ import {
   tvShowKeySchema,
   updateTvShowSchema,
 } from '@/modules/tv-shows/schemas/tv-show.schemas';
-import { assetTypes } from '@/shared/types/api-common.types';
+import { assetTypes } from '@/shared/types';
 
 export default createDomainApiHandler({
   assetType: assetTypes.tvShows,

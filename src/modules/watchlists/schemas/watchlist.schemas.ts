@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { tvShowReferenceSchema } from '@/shared/schemas/api-reference.schemas';
-import { assetTypes } from '@/shared/types/api-common.types';
+import { tvShowReferenceSchema } from '@/shared/schemas';
+import { assetTypes } from '@/shared/types';
 
 export const watchlistKeySchema = z.object({
   '@assetType': z.literal(assetTypes.watchlist),

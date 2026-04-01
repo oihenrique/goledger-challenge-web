@@ -8,8 +8,6 @@ import type {
   ReadAssetRequest,
   SearchRequest,
   UpdateAssetRequest,
-} from '@/shared/types/api-request.types';
-import type {
   AssetSchemaListItem,
   AssetSchemaResponse,
   ChainInfoResponse,
@@ -22,7 +20,7 @@ import type {
   TransactionDefinition,
   TransactionListItem,
   UpdateAssetResponse,
-} from '@/shared/types/api-response.types';
+} from '@/shared/types';
 
 type GatewayHttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 

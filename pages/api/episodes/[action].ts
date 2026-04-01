@@ -4,7 +4,7 @@ import {
   episodeKeySchema,
   updateEpisodeSchema,
 } from '@/modules/episodes/schemas/episode.schemas';
-import { assetTypes } from '@/shared/types/api-common.types';
+import { assetTypes } from '@/shared/types';
 
 export default createDomainApiHandler({
   assetType: assetTypes.episodes,
