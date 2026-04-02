@@ -45,3 +45,15 @@ export interface TvShowViewModel {
   lastTransaction: string;
   lastTransactionId: string;
 }
+
+export interface SearchTvShowsParams {
+  bookmark?: string;
+  limit?: number;
+  searchTerm?: string;
+}
+
+export interface PaginatedTvShowsResult {
+  items: TvShowViewModel[];
+  bookmark: string | null;
+  fetchedRecordsCount: number | null;
+}

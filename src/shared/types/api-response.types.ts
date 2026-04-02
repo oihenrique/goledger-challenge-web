@@ -4,8 +4,14 @@ import type {
   TransactionArgument,
 } from '@/shared/types/api-common.types';
 
+export interface SearchResponseMetadata {
+  bookmark?: string;
+  fetchedRecordsCount?: number;
+  recordsCount?: number;
+}
+
 export interface SearchResponse<TItem> {
-  metadata: unknown | null;
+  metadata: SearchResponseMetadata | null;
   result: TItem[];
 }
 

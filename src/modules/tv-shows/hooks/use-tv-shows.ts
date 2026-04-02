@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { tvShowQueryKeys } from '@/modules/tv-shows/constants/tv-show.query-keys';
-import { searchTvShows } from '@/modules/tv-shows/services/tv-show.service';
+import { searchPaginatedTvShows } from '@/modules/tv-shows/services/tv-show.service';
+import type { SearchTvShowsParams } from '@/modules/tv-shows/types/tv-show.types';
 
-export function useTvShows() {
+export function useTvShows(params: SearchTvShowsParams) {
   return useQuery({
-    queryKey: tvShowQueryKeys.list(),
-    queryFn: ({ signal }) => searchTvShows(signal),
+    queryKey: tvShowQueryKeys.list(params),
+    queryFn: ({ signal }) => searchPaginatedTvShows(params, signal),
   });
 }

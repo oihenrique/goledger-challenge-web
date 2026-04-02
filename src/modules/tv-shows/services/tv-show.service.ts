@@ -1,7 +1,9 @@
 import { internalApiRequest } from '@/lib/api/internal-api-client';
 import type {
   CreateTvShowInput,
+  PaginatedTvShowsResult,
   RawTvShow,
+  SearchTvShowsParams,
   TvShowKey,
   TvShowViewModel,
   UpdateTvShowInput,
@@ -21,7 +23,7 @@ import type {
 const tvShowsBasePath = '/api/tv-shows';
 
 export async function searchTvShows(signal?: AbortSignal): Promise<
-  TvShowViewModel[]
+  PaginatedTvShowsResult
 > {
   const response = await internalApiRequest<SearchResponse<RawTvShow>>(
     `${tvShowsBasePath}/search`,
@@ -32,7 +34,41 @@ export async function searchTvShows(signal?: AbortSignal): Promise<
     },
   );
 
-  return mapRawTvShowsToViewModels(response.result);
+  return {
+    items: mapRawTvShowsToViewModels(response.result),
+    bookmark: response.metadata?.bookmark ?? null,
+    fetchedRecordsCount:
+      response.metadata?.fetchedRecordsCount ??
+      response.metadata?.recordsCount ??
+      null,
+  };
+}
+
+export async function searchPaginatedTvShows(
+  params: SearchTvShowsParams,
+  signal?: AbortSignal,
+): Promise<PaginatedTvShowsResult> {
+  const response = await internalApiRequest<SearchResponse<RawTvShow>>(
+    `${tvShowsBasePath}/search`,
+    {
+      method: 'POST',
+      body: {
+        limit: params.limit,
+        bookmark: params.bookmark,
+        searchTerm: params.searchTerm,
+      },
+      signal,
+    },
+  );
+
+  return {
+    items: mapRawTvShowsToViewModels(response.result),
+    bookmark: response.metadata?.bookmark ?? null,
+    fetchedRecordsCount:
+      response.metadata?.fetchedRecordsCount ??
+      response.metadata?.recordsCount ??
+      null,
+  };
 }
 
 export async function readTvShow(

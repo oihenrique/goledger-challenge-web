@@ -4,6 +4,7 @@ export const searchRouteSchema = z.object({
   limit: z.number().int().positive().optional(),
   bookmark: z.string().optional(),
   resolve: z.boolean().optional(),
+  searchTerm: z.string().trim().optional(),
 });
 
 export function createReadRouteSchema<TKey extends z.ZodType>(keySchema: TKey) {
