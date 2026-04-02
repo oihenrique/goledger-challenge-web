@@ -34,6 +34,10 @@ export function PublicTvShowsPage() {
   const currentPage = previousBookmarks.length + 1;
   const hasNextPage = Boolean(data?.bookmark);
   const hasPreviousPage = previousBookmarks.length > 0;
+  const showEmptyState =
+    !isLoading && !isError && items.length === 0 && !hasPreviousPage;
+  const showCursorEmptyState =
+    !isLoading && !isError && items.length === 0 && hasPreviousPage;
 
   function handleSearchSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -148,7 +152,7 @@ export function PublicTvShowsPage() {
           </div>
         ) : null}
 
-        {!isLoading && !isError && items.length === 0 ? (
+        {showEmptyState ? (
           <div className="rounded-3xl border border-white/10 bg-card p-10 text-center">
             <p className="text-lg font-medium text-white">
               No TV shows matched this search.
@@ -157,6 +161,59 @@ export function PublicTvShowsPage() {
               Try a different title or clear the search to browse the full
               catalog.
             </p>
+          </div>
+        ) : null}
+
+        {showCursorEmptyState ? (
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-white/10 bg-card p-10 text-center">
+              <p className="text-lg font-medium text-white">
+                No more TV shows were returned for this cursor position.
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                You can return to the previous page without reloading the app.
+              </p>
+              <div className="mt-6 flex justify-center">
+                <Button variant="outline" onClick={handlePreviousPage}>
+                  Return to previous page
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">
+                Batch {currentPage}. The current cursor returned an empty batch.
+              </p>
+              <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#tv-shows-pagination"
+                      aria-disabled={!hasPreviousPage}
+                      className={
+                        !hasPreviousPage
+                          ? 'pointer-events-none opacity-50'
+                          : undefined
+                      }
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handlePreviousPage();
+                      }}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#tv-shows-pagination"
+                      aria-disabled
+                      className="pointer-events-none opacity-50"
+                      onClick={(event) => {
+                        event.preventDefault();
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
           </div>
         ) : null}
 
