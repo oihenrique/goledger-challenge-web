@@ -1,34 +1,166 @@
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
+import { TvShowDeleteDialog } from '@/components/tv-shows/tv-show-delete-dialog';
+import { TvShowFormModal } from '@/components/tv-shows/tv-show-form-modal';
 import { Button } from '@/components/ui/button';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { TvShowManagementTable } from '@/components/tv-shows/tv-show-management-table';
 import { PageShell } from '@/layout/page-shell';
+import { InternalApiError } from '@/lib/api/internal-api-client';
+import {
+  useCreateTvShow,
+  useDeleteTvShow,
+  useUpdateTvShow,
+} from '@/modules/tv-shows/hooks/use-tv-show-mutations';
 import { useTvShows } from '@/modules/tv-shows/hooks/use-tv-shows';
+import type {
+  CreateTvShowInput,
+  TvShowViewModel,
+  UpdateTvShowInput,
+} from '@/modules/tv-shows/types/tv-show.types';
+
+const tvShowsPerPage = 10;
+
+function getMutationErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof InternalApiError) {
+    return error.message;
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return fallback;
+}
 
 export function ManageTvShowsPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentBookmark, setCurrentBookmark] = useState<string | undefined>();
+  const [previousBookmarks, setPreviousBookmarks] = useState<
+    Array<string | undefined>
+  >([]);
+  const [formMode, setFormMode] = useState<'create' | 'edit' | null>(null);
+  const [selectedTvShow, setSelectedTvShow] = useState<TvShowViewModel | null>(
+    null,
+  );
+  const [tvShowPendingDeletion, setTvShowPendingDeletion] =
+    useState<TvShowViewModel | null>(null);
   const { data, isLoading, isError, error } = useTvShows({
-    limit: 50,
+    limit: tvShowsPerPage,
+    bookmark: currentBookmark,
+    searchTerm: searchTerm.trim() || undefined,
   });
+  const createMutation = useCreateTvShow();
+  const updateMutation = useUpdateTvShow();
+  const deleteMutation = useDeleteTvShow();
   const tvShows = data?.items ?? [];
+  const currentPage = previousBookmarks.length + 1;
+  const hasPreviousPage = previousBookmarks.length > 0;
+  const hasNextPage = Boolean(data?.bookmark);
 
-  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const filteredTvShows = tvShows.filter((tvShow) => {
-    if (!normalizedSearchTerm) {
-      return true;
+  function openCreateModal() {
+    setSelectedTvShow(null);
+    setFormMode('create');
+  }
+
+  function openEditModal(tvShow: TvShowViewModel) {
+    setSelectedTvShow(tvShow);
+    setFormMode('edit');
+  }
+
+  function closeFormModal() {
+    setFormMode(null);
+    setSelectedTvShow(null);
+  }
+
+  function openDeleteDialog(tvShow: TvShowViewModel) {
+    setTvShowPendingDeletion(tvShow);
+  }
+
+  function closeDeleteDialog() {
+    setTvShowPendingDeletion(null);
+  }
+
+  function handleNextPage() {
+    if (!data?.bookmark) {
+      return;
     }
 
-    return (
-      tvShow.title.toLowerCase().includes(normalizedSearchTerm) ||
-      tvShow.description.toLowerCase().includes(normalizedSearchTerm)
-    );
-  });
+    setPreviousBookmarks((previous) => [...previous, currentBookmark]);
+    setCurrentBookmark(data.bookmark);
+  }
+
+  function handlePreviousPage() {
+    setPreviousBookmarks((previous) => {
+      const nextPrevious = [...previous];
+      const previousBookmark = nextPrevious.pop();
+      setCurrentBookmark(previousBookmark);
+      return nextPrevious;
+    });
+  }
+
+  async function handleFormSubmit(
+    input: CreateTvShowInput | UpdateTvShowInput,
+  ) {
+    try {
+      if (formMode === 'edit') {
+        await updateMutation.mutateAsync(input);
+        toast.success(`Updated ${input.title} in the editorial catalog.`);
+      } else {
+        await createMutation.mutateAsync(input);
+        toast.success(`Created ${input.title} in the editorial catalog.`);
+      }
+
+      closeFormModal();
+    } catch (mutationError) {
+      toast.error(
+        getMutationErrorMessage(
+          mutationError,
+          formMode === 'edit'
+            ? 'Unable to update this TV show.'
+            : 'Unable to create this TV show.',
+        ),
+      );
+    }
+  }
+
+  async function handleDeleteConfirm() {
+    if (!tvShowPendingDeletion) {
+      return;
+    }
+
+    try {
+      await deleteMutation.mutateAsync({
+        '@assetType': 'tvShows',
+        title: tvShowPendingDeletion.title,
+      });
+      toast.success(`Deleted ${tvShowPendingDeletion.title} from the catalog.`);
+      closeDeleteDialog();
+    } catch (mutationError) {
+      toast.error(
+        getMutationErrorMessage(
+          mutationError,
+          'Unable to delete this TV show.',
+        ),
+      );
+    }
+  }
+
+  const isFormPending = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <PageShell>
-      <section className="space-y-8 py-14 sm:py-16">
+    <>
+      <PageShell>
+        <section className="space-y-8 py-14 sm:py-16">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
@@ -46,7 +178,7 @@ export function ManageTvShowsPage() {
             <Button variant="outline" asChild>
               <Link href="/tv-shows">Open public catalog</Link>
             </Button>
-            <Button>Create TV show</Button>
+            <Button onClick={openCreateModal}>Create TV show</Button>
           </div>
         </div>
 
@@ -56,7 +188,11 @@ export function ManageTvShowsPage() {
               <Search className="size-4 text-muted-foreground" />
               <input
                 value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                  setCurrentBookmark(undefined);
+                  setPreviousBookmarks([]);
+                }}
                 placeholder="Filter by title or description"
                 className="w-full bg-transparent text-sm text-white outline-none placeholder:text-muted-foreground"
               />
@@ -68,22 +204,24 @@ export function ManageTvShowsPage() {
                 Registered
               </p>
               <p className="mt-4 text-3xl font-semibold text-white">
-                {tvShows.length}
+                {data?.fetchedRecordsCount ?? tvShows.length}
               </p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-card p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Visible rows
+                Current page
               </p>
               <p className="mt-4 text-3xl font-semibold text-white">
-                {filteredTvShows.length}
+                {currentPage}
               </p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-card p-5">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Surface
+                Batch size
               </p>
-              <p className="mt-4 text-lg font-semibold text-white">Admin</p>
+              <p className="mt-4 text-lg font-semibold text-white">
+                {tvShowsPerPage} per request
+              </p>
             </div>
           </div>
         </div>
@@ -105,7 +243,7 @@ export function ManageTvShowsPage() {
           </div>
         ) : null}
 
-        {!isLoading && !isError && filteredTvShows.length === 0 ? (
+        {!isLoading && !isError && tvShows.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-card p-10 text-center">
             <p className="text-lg font-medium text-white">
               No TV shows matched this workspace filter.
@@ -117,10 +255,76 @@ export function ManageTvShowsPage() {
           </div>
         ) : null}
 
-        {!isLoading && !isError && filteredTvShows.length > 0 ? (
-          <TvShowManagementTable tvShows={filteredTvShows} />
+        {!isLoading && !isError && tvShows.length > 0 ? (
+          <div className="space-y-6">
+            <TvShowManagementTable
+              tvShows={tvShows}
+              onEdit={openEditModal}
+              onDelete={openDeleteDialog}
+            />
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">
+                Page {currentPage}. Showing up to {tvShowsPerPage} titles per
+                workspace request.
+              </p>
+              <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#tv-shows-management-pagination"
+                      aria-disabled={!hasPreviousPage}
+                      className={
+                        !hasPreviousPage
+                          ? 'pointer-events-none opacity-50'
+                          : undefined
+                      }
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handlePreviousPage();
+                      }}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#tv-shows-management-pagination"
+                      aria-disabled={!hasNextPage}
+                      className={
+                        !hasNextPage ? 'pointer-events-none opacity-50' : undefined
+                      }
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleNextPage();
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          </div>
         ) : null}
-      </section>
-    </PageShell>
+        </section>
+      </PageShell>
+
+      {formMode ? (
+        <TvShowFormModal
+          key={`${formMode}-${selectedTvShow?.key ?? 'new'}`}
+          mode={formMode}
+          tvShow={selectedTvShow}
+          isPending={isFormPending}
+          onClose={closeFormModal}
+          onSubmit={handleFormSubmit}
+        />
+      ) : null}
+
+      {tvShowPendingDeletion ? (
+        <TvShowDeleteDialog
+          tvShow={tvShowPendingDeletion}
+          isPending={deleteMutation.isPending}
+          onClose={closeDeleteDialog}
+          onConfirm={handleDeleteConfirm}
+        />
+      ) : null}
+    </>
   );
 }
