@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { Search } from 'lucide-react';
 import { useState } from 'react';
 
+import { SearchInputGroup } from '@/components/shared/search-input-group';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -19,7 +19,8 @@ import { useTvShows } from '@/modules/tv-shows/hooks/use-tv-shows';
 const tvShowsPerPage = 12;
 
 export function PublicTvShowsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [currentBookmark, setCurrentBookmark] = useState<string | undefined>();
   const [previousBookmarks, setPreviousBookmarks] = useState<
     Array<string | undefined>
@@ -27,15 +28,23 @@ export function PublicTvShowsPage() {
   const { data, isLoading, isError, error } = useTvShows({
     limit: tvShowsPerPage,
     bookmark: currentBookmark,
-    searchTerm: searchTerm.trim() || undefined,
+    searchTerm: submittedSearchTerm || undefined,
   });
   const items = data?.items ?? [];
   const currentPage = previousBookmarks.length + 1;
   const hasNextPage = Boolean(data?.bookmark);
   const hasPreviousPage = previousBookmarks.length > 0;
 
-  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchTerm(event.target.value);
+  function handleSearchSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmittedSearchTerm(searchInput.trim());
+    setCurrentBookmark(undefined);
+    setPreviousBookmarks([]);
+  }
+
+  function handleClearSearch() {
+    setSearchInput('');
+    setSubmittedSearchTerm('');
     setCurrentBookmark(undefined);
     setPreviousBookmarks([]);
   }
@@ -93,15 +102,15 @@ export function PublicTvShowsPage() {
 
         <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
           <CardContent className="px-4 py-4 sm:px-5 sm:py-5">
-            <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-3">
-              <Search className="size-4 text-muted-foreground" />
-              <input
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder="Search by title or description"
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-muted-foreground"
-              />
-            </label>
+            <SearchInputGroup
+              id="public-tv-show-search"
+              label="Search"
+              value={searchInput}
+              placeholder="Search by title or description"
+              onChange={setSearchInput}
+              onClear={handleClearSearch}
+              onSubmit={handleSearchSubmit}
+            />
           </CardContent>
         </Card>
 
@@ -161,8 +170,11 @@ export function PublicTvShowsPage() {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                Page {currentPage}. Showing up to {tvShowsPerPage} series per
-                request.
+                Batch {currentPage}. Showing up to {tvShowsPerPage} series per
+                request
+                {hasNextPage
+                  ? '. More results available.'
+                  : '. End of current result set.'}
               </p>
               <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                 <PaginationContent>

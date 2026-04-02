@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 import { SiteFooter } from '@/components/shared/site-footer';
-import { SiteHeader } from '@/layout/site-header';
+import { SiteHeader } from '@/components/shared/site-header';
 
 export function PageShell({ children }: PropsWithChildren) {
   return (
