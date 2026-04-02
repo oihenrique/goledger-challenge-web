@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { ExternalLink, Plus, X } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 
 interface TvShowInfoModalProps {
@@ -14,17 +14,10 @@ function createTvShowHref(title: string): string {
   return `/tv-shows/${encodeURIComponent(title)}`;
 }
 
-export function TvShowInfoModal({
-  onClose,
-  tvShow,
-}: TvShowInfoModalProps) {
+export function TvShowInfoModal({ onClose, tvShow }: TvShowInfoModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8">
-      <div
-        className="absolute inset-0"
-        aria-hidden="true"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0" aria-hidden="true" onClick={onClose} />
       <Card className="relative z-10 w-full max-w-3xl rounded-[2rem] border border-white/10 bg-card py-0 shadow-none ring-0">
         <CardHeader className="border-b border-white/10 px-6 py-5">
           <div className="flex items-start justify-between gap-4">

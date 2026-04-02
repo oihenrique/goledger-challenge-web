@@ -2,16 +2,16 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { SearchInputGroup } from '@/components/shared/search-input-group';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui';
+import { Card, CardContent } from '@/components/ui';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Skeleton } from '@/components/ui/skeleton';
+} from '@/components/ui';
+import { Skeleton } from '@/components/ui';
 import { TvShowCatalogCard } from '@/components/tv-shows/tv-show-catalog-card';
 import { PageShell } from '@/layout/page-shell';
 import { useTvShows } from '@/modules/tv-shows/hooks/use-tv-shows';

@@ -5,14 +5,14 @@ import { toast } from 'sonner';
 import { SearchInputGroup } from '@/components/shared/search-input-group';
 import { TvShowDeleteDialog } from '@/components/tv-shows/tv-show-delete-dialog';
 import { TvShowFormModal } from '@/components/tv-shows/tv-show-form-modal';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
+} from '@/components/ui';
 import { TvShowManagementTable } from '@/components/tv-shows/tv-show-management-table';
 import { PageShell } from '@/layout/page-shell';
 import { InternalApiError } from '@/lib/api/internal-api-client';

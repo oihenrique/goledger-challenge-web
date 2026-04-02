@@ -1,7 +1,7 @@
 import { LoaderCircle, Trash2, X } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 
 interface TvShowDeleteDialogProps {
@@ -33,8 +33,8 @@ export function TvShowDeleteDialog({
                 </CardTitle>
                 <p className="text-sm leading-7 text-[#d5d0c5]">
                   This action removes the title from the editorial catalog. The
-                  blockchain history remains queryable, but the active asset will be
-                  deleted from the workspace.
+                  blockchain history remains queryable, but the active asset
+                  will be deleted from the workspace.
                 </p>
               </div>
             </div>
@@ -50,7 +50,9 @@ export function TvShowDeleteDialog({
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
               Asset key
             </p>
-            <p className="mt-2 break-all text-sm text-[#ebe5d8]">{tvShow.key}</p>
+            <p className="mt-2 break-all text-sm text-[#ebe5d8]">
+              {tvShow.key}
+            </p>
           </div>
 
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">

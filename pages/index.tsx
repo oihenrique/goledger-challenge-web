@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui';
 import { PageShell } from '@/layout/page-shell';
 
 export default function Home() {

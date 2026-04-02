@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { LoaderCircle, X } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { createTvShowSchema } from '@/modules/tv-shows/schemas/tv-show.schemas';
 import type {
   CreateTvShowInput,
@@ -71,7 +71,9 @@ export function TvShowFormModal({
     const parsedPayload = createTvShowSchema.safeParse(payload);
 
     if (!parsedPayload.success) {
-      setFormError(parsedPayload.error.issues[0]?.message ?? 'Invalid form data.');
+      setFormError(
+        parsedPayload.error.issues[0]?.message ?? 'Invalid form data.',
+      );
       return;
     }
 
@@ -184,7 +186,9 @@ export function TvShowFormModal({
                 {isPending ? (
                   <LoaderCircle className="size-4 animate-spin" />
                 ) : null}
-                <span>{mode === 'create' ? 'Create TV show' : 'Save changes'}</span>
+                <span>
+                  {mode === 'create' ? 'Create TV show' : 'Save changes'}
+                </span>
               </Button>
             </div>
           </form>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { BookmarkPlus } from 'lucide-react';
 
 import { ProfileMenu } from '@/components/shared/profile-menu';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui';
 
 export function SiteHeader() {
   return (

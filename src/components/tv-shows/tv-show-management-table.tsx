@@ -2,7 +2,7 @@ import { PencilLine, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { TvShowManagementDetailsModal } from '@/components/tv-shows/tv-show-management-details-modal';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 
 interface TvShowManagementTableProps {

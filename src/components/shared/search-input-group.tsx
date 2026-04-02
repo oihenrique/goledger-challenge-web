@@ -1,9 +1,9 @@
 import { Search, X } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { ButtonGroup } from '@/components/ui/button-group';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui';
+import { ButtonGroup } from '@/components/ui';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui';
+import { Input } from '@/components/ui';
 
 interface SearchInputGroupProps {
   id: string;

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { ChevronLeft, Layers2, ListVideo, ShieldCheck } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { Skeleton } from '@/components/ui';
 import { PageShell } from '@/layout/page-shell';
 import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
 import { assetTypes } from '@/shared/types';
