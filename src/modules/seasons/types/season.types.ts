@@ -47,3 +47,15 @@ export interface SeasonViewModel {
   updatedAt: string;
   lastTransaction: string;
 }
+
+export interface SearchSeasonsParams {
+  bookmark?: string;
+  limit?: number;
+  searchTerm?: string;
+}
+
+export interface PaginatedSeasonsResult {
+  items: SeasonViewModel[];
+  bookmark: string | null;
+  fetchedRecordsCount: number | null;
+}
