@@ -1,6 +1,7 @@
 export * from './button';
 export * from './button-group';
 export * from './card';
+export * from './empty';
 export * from './field';
 export * from './input';
 export * from './label';
