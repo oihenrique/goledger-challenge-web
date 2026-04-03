@@ -1,5 +1,11 @@
 import Link from 'next/link';
-import { ChevronLeft, Layers2, ListVideo, ShieldCheck } from 'lucide-react';
+import {
+  ChevronLeft,
+  Layers2,
+  ListVideo,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
@@ -68,32 +74,19 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
                 <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
                   {data.title}
                 </h1>
-                <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-sm text-[#d5d0c5]">
-                  Recommended age: {data.recommendedAge}+
+                <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
+                  <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
+                    Recommended age: {data.recommendedAge}+
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
+                    <Sparkles className="size-4 text-muted-foreground" />
+                    Public discovery detail
+                  </div>
                 </div>
                 <p className="max-w-3xl text-base leading-8 text-[#d5d0c5]">
                   {data.description}
                 </p>
               </div>
-
-              <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-                <CardHeader className="px-6 py-6">
-                  <CardTitle className="text-lg text-white">
-                    Catalog context
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 px-6 pb-6">
-                  <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4 text-sm text-[#d5d0c5]">
-                    This page is the public-facing detail surface for the TV
-                    show. Technical blockchain metadata stays in the editorial
-                    workspace detail flow.
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4 text-sm text-[#d5d0c5]">
-                    Future iterations will connect watchlist actions, richer
-                    season drill-down, and editorial recommendations.
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-3">
