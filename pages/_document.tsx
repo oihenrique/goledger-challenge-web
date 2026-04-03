@@ -10,7 +10,7 @@ export default function Document() {
         />
         <meta name="theme-color" content="#0f172a" />
       </Head>
-      <body className="dark antialiased">
+      <body className="dark antialiased font-sans">
         <Main />
         <NextScript />
       </body>

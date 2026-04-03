@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
+import { useEffect } from 'react';
 
 import { AppProviders } from '@/shared/providers/app-providers';
 
@@ -10,6 +11,14 @@ const inter = Inter({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    document.body.classList.add(inter.variable, inter.className);
+
+    return () => {
+      document.body.classList.remove(inter.variable, inter.className);
+    };
+  }, []);
+
   return (
     <AppProviders>
       <div className={`${inter.variable} font-sans`}>

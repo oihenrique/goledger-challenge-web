@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { X } from 'lucide-react';
 
-import { Button } from '@/components/ui';
+import { Button, Dialog, DialogContent } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { formatTimestamp, toTimestamp } from '@/lib/date';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
@@ -23,9 +23,12 @@ export function TvShowManagementDetailsModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8">
-      <div className="absolute inset-0" aria-hidden="true" onClick={onClose} />
-      <Card className="relative z-10 w-full max-w-3xl rounded-[2rem] border border-white/10 bg-card py-0 shadow-none ring-0">
+    <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
+      <DialogContent
+        showCloseButton={false}
+        className="w-full max-w-3xl rounded-[2rem] border border-white/10 bg-transparent p-0 ring-0 sm:max-w-3xl"
+      >
+        <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none ring-0">
         <CardHeader className="border-b border-white/10 px-6 py-5">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-3">
@@ -103,7 +106,8 @@ export function TvShowManagementDetailsModal({
             </div>
           </div>
         </CardContent>
-      </Card>
-    </div>
+        </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

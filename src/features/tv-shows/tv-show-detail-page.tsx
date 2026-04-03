@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   Layers2,
   ListVideo,
-  ShieldCheck,
   Sparkles,
 } from 'lucide-react';
 
