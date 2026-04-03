@@ -63,3 +63,15 @@ export interface EpisodeViewModel {
   updatedAt: string;
   lastTransaction: string;
 }
+
+export interface SearchEpisodesParams {
+  bookmark?: string;
+  limit?: number;
+  searchTerm?: string;
+}
+
+export interface PaginatedEpisodesResult {
+  items: EpisodeViewModel[];
+  bookmark: string | null;
+  fetchedRecordsCount: number | null;
+}
