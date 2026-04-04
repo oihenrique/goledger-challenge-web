@@ -22,9 +22,7 @@ interface DomainApiHandlerConfig {
   createSchema: ZodType;
   updateSchema: ZodType;
   keySchema: ZodType;
-  buildSearchSelector?: (body: {
-    searchTerm?: string;
-  }) => Record<string, unknown>;
+  buildSearchSelector?: (body: Record<string, unknown>) => Record<string, unknown>;
 }
 
 const actionMethods = {
@@ -61,9 +59,7 @@ export function createDomainApiHandler(
         case 'search': {
           const body = searchRouteSchema.parse(req.body ?? {});
           const selector = config.buildSearchSelector
-            ? config.buildSearchSelector({
-                searchTerm: body.searchTerm,
-              })
+            ? config.buildSearchSelector(body)
             : {
                 '@assetType': config.assetType,
               };

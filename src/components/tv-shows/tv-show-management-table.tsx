@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { PencilLine, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -64,7 +65,7 @@ export function TvShowManagementTable({
                     <div className="space-y-2">
                       <p className="font-medium text-white">{tvShow.title}</p>
                       <div
-                        className="max-w-[220px] truncate text-xs text-muted-foreground"
+                        className="max-w-55 truncate text-xs text-muted-foreground"
                         title={tvShow.key}
                       >
                         {tvShow.key}
@@ -82,8 +83,22 @@ export function TvShowManagementTable({
                   <td className="px-5 py-4 text-sm text-[#d5d0c5]">
                     {tvShow.recommendedAge}+
                   </td>
-                  <td className="min-w-[196px] px-5 py-4 whitespace-nowrap">
+                  <td className="min-w-49 px-5 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        onClick={(event) => {
+                          event.stopPropagation();
+                        }}
+                      >
+                        <Link
+                          href={`/manage/tv-shows/${encodeURIComponent(tvShow.title)}`}
+                        >
+                          <span>Manage</span>
+                        </Link>
+                      </Button>
                       <Button
                         variant="outline"
                         size="sm"

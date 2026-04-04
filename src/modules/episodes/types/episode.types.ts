@@ -67,6 +67,7 @@ export interface EpisodeViewModel {
 export interface SearchEpisodesParams {
   bookmark?: string;
   limit?: number;
+  seasonKey?: string;
   searchTerm?: string;
 }
 

@@ -1,12 +1,6 @@
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import {
-  ChevronLeft,
-  Layers2,
-  ListVideo,
-  Sparkles,
-} from 'lucide-react';
+import { useState } from 'react';
+import { ChevronLeft, Layers2, ListVideo, Sparkles } from 'lucide-react';
 
 import { TvShowEpisodeCard } from '@/components/tv-shows/tv-show-episode-card';
 import { TvShowRelationsSkeleton } from '@/components/tv-shows/tv-show-relations-skeleton';
@@ -22,94 +16,16 @@ import {
 } from '@/components/ui';
 import { Skeleton } from '@/components/ui';
 import { PageShell } from '@/layout/page-shell';
-import { internalApiRequest } from '@/lib/api/internal-api-client';
-import type {
-  EpisodeViewModel,
-  RawEpisode,
-} from '@/modules/episodes/types/episode.types';
-import type {
-  RawSeason,
-  SeasonViewModel,
-} from '@/modules/seasons/types/season.types';
+import { useEpisodes } from '@/modules/episodes/hooks/use-episodes';
+import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
 import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
 import { assetTypes } from '@/shared/types';
-import type { SearchResponse } from '@/shared/types';
 
 interface TvShowDetailPageProps {
   title: string;
 }
 
-const relationBatchLimit = 200;
-
-function mapRawSeasonToViewModel(rawSeason: RawSeason): SeasonViewModel {
-  return {
-    key: rawSeason['@key'],
-    number: rawSeason.number,
-    year: rawSeason.year,
-    tvShowKey: rawSeason.tvShow['@key'],
-    updatedAt: rawSeason['@lastUpdated'],
-    lastTransaction: rawSeason['@lastTx'],
-  };
-}
-
-function mapRawEpisodeToViewModel(rawEpisode: RawEpisode): EpisodeViewModel {
-  return {
-    key: rawEpisode['@key'],
-    episodeNumber: rawEpisode.episodeNumber,
-    title: rawEpisode.title,
-    description: rawEpisode.description,
-    releaseDate: rawEpisode.releaseDate,
-    rating: rawEpisode.rating,
-    seasonKey: rawEpisode.season['@key'],
-    updatedAt: rawEpisode['@lastUpdated'],
-    lastTransaction: rawEpisode['@lastTx'],
-  };
-}
-
-async function fetchRelatedSeasons(
-  tvShowKey: string,
-  signal?: AbortSignal,
-): Promise<SeasonViewModel[]> {
-  const response = await internalApiRequest<SearchResponse<RawSeason>>(
-    '/api/seasons/search',
-    {
-      method: 'POST',
-      body: {
-        limit: relationBatchLimit,
-      },
-      signal,
-    },
-  );
-
-  return response.result
-    .filter((season) => season.tvShow['@key'] === tvShowKey)
-    .map(mapRawSeasonToViewModel)
-    .sort(
-      (firstSeason, secondSeason) => firstSeason.number - secondSeason.number,
-    );
-}
-
-async function fetchRelatedEpisodes(
-  signal?: AbortSignal,
-): Promise<EpisodeViewModel[]> {
-  const response = await internalApiRequest<SearchResponse<RawEpisode>>(
-    '/api/episodes/search',
-    {
-      method: 'POST',
-      body: {
-        limit: relationBatchLimit,
-      },
-      signal,
-    },
-  );
-
-  return response.result
-    .map(mapRawEpisodeToViewModel)
-    .sort(
-      (firstEpisode, secondEpisode) =>
-        firstEpisode.episodeNumber - secondEpisode.episodeNumber,
-    );
-}
+const relationBatchLimit = 100;
 
 export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
   const { data, isLoading, isError, error } = useTvShow({
@@ -119,43 +35,34 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
   const [selectedSeasonKey, setSelectedSeasonKey] = useState<string | null>(
     null,
   );
+  const seasonsQuery = useSeasons({ limit: relationBatchLimit });
 
-  const seasonsQuery = useQuery({
-    queryKey: ['tv-show-detail', data?.key ?? '', 'seasons'],
-    queryFn: ({ signal }) => {
-      if (!data?.key) {
-        throw new Error('TV show key is required to load seasons.');
-      }
-
-      return fetchRelatedSeasons(data.key, signal);
-    },
-    enabled: Boolean(data?.key),
-  });
-
-  const episodesQuery = useQuery({
-    queryKey: ['tv-show-detail', data?.key ?? '', 'episodes'],
-    queryFn: ({ signal }) => fetchRelatedEpisodes(signal),
-    enabled: Boolean(data?.key),
-  });
-
-  const seasons = seasonsQuery.data ?? [];
+  const seasons =
+    data && seasonsQuery.data
+      ? seasonsQuery.data.items
+          .filter((season) => season.tvShowKey === data.key)
+          .sort(
+            (firstSeason, secondSeason) =>
+              firstSeason.number - secondSeason.number,
+          )
+      : [];
   const activeSeasonKey =
     selectedSeasonKey &&
     seasons.some((season) => season.key === selectedSeasonKey)
       ? selectedSeasonKey
       : (seasons[0]?.key ?? null);
+  const episodesQuery = useEpisodes({
+    limit: relationBatchLimit,
+    seasonKey: activeSeasonKey ?? undefined,
+  });
   const selectedSeason =
     seasons.find((season) => season.key === activeSeasonKey) ?? null;
-
-  const episodesForSelectedSeason = useMemo(() => {
-    if (!selectedSeason) {
-      return [];
-    }
-
-    return (episodesQuery.data ?? []).filter(
-      (episode) => episode.seasonKey === selectedSeason.key,
-    );
-  }, [episodesQuery.data, selectedSeason]);
+  const episodesForSelectedSeason = selectedSeason
+    ? (episodesQuery.data?.items ?? []).sort(
+        (firstEpisode, secondEpisode) =>
+          firstEpisode.episodeNumber - secondEpisode.episodeNumber,
+      )
+    : [];
 
   const isRelationsLoading = seasonsQuery.isLoading || episodesQuery.isLoading;
   const isRelationsError = seasonsQuery.isError || episodesQuery.isError;
@@ -226,9 +133,9 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
               </div>
 
               <Card className="overflow-hidden rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-                <div className="relative min-h-[26rem] bg-[#2a2c31]">
+                <div className="relative min-h-104 bg-[#2a2c31]">
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,44,49,0.18),rgba(15,23,42,0.94))]" />
-                  <div className="relative flex h-full min-h-[26rem] flex-col justify-between p-6">
+                  <div className="relative flex h-full min-h-104 flex-col justify-between p-6">
                     <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
                       TV show cover
                     </div>
