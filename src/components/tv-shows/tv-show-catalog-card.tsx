@@ -44,6 +44,7 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
       <Card
         role="link"
         tabIndex={0}
+        aria-label={`Open public details for ${tvShow.title}`}
         onClick={handleNavigateToTvShow}
         onKeyDown={handleCardKeyDown}
         className="cursor-pointer rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0 transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

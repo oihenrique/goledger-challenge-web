@@ -179,7 +179,11 @@ export function ManageTvShowsPage() {
   return (
     <>
       <PageShell>
-        <section className="space-y-8 py-14 sm:py-16">
+        <section
+          className="space-y-8 py-14 sm:py-16"
+          aria-busy={isLoading}
+          aria-live="polite"
+        >
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
@@ -242,11 +246,18 @@ export function ManageTvShowsPage() {
           </div>
 
           {isLoading ? (
-            <div className="h-80 rounded-3xl border border-white/10 bg-card" />
+            <div
+              role="status"
+              aria-label="Loading TV show management data"
+              className="h-80 rounded-3xl border border-white/10 bg-card"
+            />
           ) : null}
 
           {isError ? (
-            <div className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6">
+            <div
+              role="alert"
+              className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6"
+            >
               <p className="text-sm font-medium text-rose-200">
                 Unable to load TV show management data.
               </p>
@@ -259,7 +270,10 @@ export function ManageTvShowsPage() {
           ) : null}
 
           {showEmptyState ? (
-            <div className="rounded-3xl border border-white/10 bg-card p-10 text-center">
+            <div
+              role="status"
+              className="rounded-3xl border border-white/10 bg-card p-10 text-center"
+            >
               <p className="text-lg font-medium text-white">
                 No TV shows matched this workspace filter.
               </p>

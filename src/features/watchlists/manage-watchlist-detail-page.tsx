@@ -271,7 +271,11 @@ export function ManageWatchlistDetailPage({
   return (
     <>
       <PageShell>
-        <section className="space-y-8 py-14 sm:py-16">
+        <section
+          className="space-y-8 py-14 sm:py-16"
+          aria-busy={watchlistQuery.isLoading}
+          aria-live="polite"
+        >
           <div className="flex flex-wrap items-center gap-3">
             <Button variant="outline" size="sm" asChild>
               <Link href="/manage/watchlists">
@@ -282,14 +286,17 @@ export function ManageWatchlistDetailPage({
           </div>
 
           {watchlistQuery.isLoading ? (
-            <div className="space-y-6">
+            <div role="status" aria-label="Loading watchlist" className="space-y-6">
               <div className="h-16 w-1/2 rounded-3xl border border-white/10 bg-card" />
               <div className="h-120 rounded-3xl border border-white/10 bg-card" />
             </div>
           ) : null}
 
           {watchlistQuery.isError ? (
-            <div className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6">
+            <div
+              role="alert"
+              className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6"
+            >
               <p className="text-sm font-medium text-rose-200">
                 Unable to load this watchlist.
               </p>
@@ -382,7 +389,11 @@ export function ManageWatchlistDetailPage({
 
                     {submittedSearchTerm ? (
                       allTvShowsQuery.isLoading ? (
-                        <div className="h-56 rounded-2xl border border-white/10 bg-[#2a2c31]" />
+                        <div
+                          role="status"
+                          aria-label="Searching TV shows"
+                          className="h-56 rounded-2xl border border-white/10 bg-[#2a2c31]"
+                        />
                       ) : selectableResults.length > 0 ? (
                         <div className="space-y-3">
                           {selectableResults.map((tvShow) => {
@@ -390,9 +401,12 @@ export function ManageWatchlistDetailPage({
                               selectedSearchResultKey === tvShow.key;
 
                             return (
-                              <label
+                              <button
+                                type="button"
                                 key={tvShow.key}
-                                className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 transition ${
+                                aria-pressed={isSelected}
+                                aria-label={`Select ${tvShow.title} to add to ${watchlist.title}`}
+                                className={`flex w-full cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                                   isSelected
                                     ? 'border-[#7c6135] bg-[#2a2c31]'
                                     : 'border-white/10 bg-[#1c1d21] hover:bg-[#23252a]'
@@ -418,12 +432,15 @@ export function ManageWatchlistDetailPage({
                                     {tvShow.description}
                                   </p>
                                 </div>
-                              </label>
+                              </button>
                             );
                           })}
                         </div>
                       ) : allTvShowsQuery.isError ? (
-                        <div className="rounded-2xl border border-rose-500/20 bg-rose-950/20 px-4 py-4">
+                        <div
+                          role="alert"
+                          className="rounded-2xl border border-rose-500/20 bg-rose-950/20 px-4 py-4"
+                        >
                           <p className="text-sm font-medium text-rose-200">
                             Unable to search TV shows.
                           </p>

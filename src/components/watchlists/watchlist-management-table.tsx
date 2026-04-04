@@ -46,7 +46,11 @@ export function WatchlistManagementTable({
         {watchlists.map((watchlist) => (
           <li
             key={watchlist.key}
+            role="link"
             tabIndex={0}
+            aria-label={`Open watchlist ${watchlist.title} with ${getItemsLabel(
+              watchlist.tvShowKeys.length,
+            )}`}
             onKeyDown={(event) => handleRowKeyDown(event, watchlist)}
             onClick={() => {
               void router.push(

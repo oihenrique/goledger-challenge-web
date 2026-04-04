@@ -480,6 +480,8 @@ export function ManageTvShowRelationsPage({
                             <button
                               key={season.key}
                               type="button"
+                              aria-pressed={isActive}
+                              aria-label={`Select season ${season.number}`}
                               onClick={() => handleSeasonSelection(season.key)}
                               className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
                                 isActive
@@ -658,19 +660,19 @@ export function ManageTvShowRelationsPage({
                               <table className="min-w-full divide-y divide-white/10">
                                 <thead className="bg-[#2a2c31]">
                                   <tr className="text-left text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                                    <th className="px-5 py-4 font-medium">
+                                    <th scope="col" className="px-5 py-4 font-medium">
                                       Episode
                                     </th>
-                                    <th className="px-5 py-4 font-medium">
+                                    <th scope="col" className="px-5 py-4 font-medium">
                                       Description
                                     </th>
-                                    <th className="px-5 py-4 font-medium">
+                                    <th scope="col" className="px-5 py-4 font-medium">
                                       Release date
                                     </th>
-                                    <th className="px-5 py-4 font-medium">
+                                    <th scope="col" className="px-5 py-4 font-medium">
                                       Rating
                                     </th>
-                                    <th className="px-5 py-4 font-medium">
+                                    <th scope="col" className="px-5 py-4 font-medium">
                                       Actions
                                     </th>
                                   </tr>
@@ -679,6 +681,7 @@ export function ManageTvShowRelationsPage({
                                   {episodes.map((episode) => (
                                     <tr
                                       key={episode.key}
+                                      aria-label={`Open details for episode ${episode.episodeNumber} ${episode.title}`}
                                       tabIndex={0}
                                       onClick={() =>
                                         setEpisodeInDetails(episode)
