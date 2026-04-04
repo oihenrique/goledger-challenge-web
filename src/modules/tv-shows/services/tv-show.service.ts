@@ -1,4 +1,8 @@
 import { internalApiRequest } from '@/lib/api/internal-api-client';
+import {
+  getBestTmdbPosterUrl,
+  searchTmdbTvShows,
+} from '@/modules/themoviedb/services/themoviedb.service';
 import type {
   CreateTvShowInput,
   PaginatedTvShowsResult,
@@ -22,9 +26,40 @@ import type {
 
 const tvShowsBasePath = '/api/tv-shows';
 
-export async function searchTvShows(signal?: AbortSignal): Promise<
-  PaginatedTvShowsResult
-> {
+async function enrichTvShowWithCoverImage(
+  tvShow: RawTvShow,
+): Promise<{ tvShow: RawTvShow; coverImageUrl?: string }> {
+  try {
+    const results = await searchTmdbTvShows(tvShow.title);
+    const coverImageUrl = getBestTmdbPosterUrl(results, tvShow.title);
+    return { tvShow, coverImageUrl };
+  } catch (error) {
+    console.warn(`Failed to fetch cover image for "${tvShow.title}":`, error);
+    return { tvShow };
+  }
+}
+
+async function enrichTvShowsWithCoverImages(
+  tvShows: RawTvShow[],
+): Promise<Record<string, string>> {
+  const enrichedResults = await Promise.allSettled(
+    tvShows.map((tvShow) => enrichTvShowWithCoverImage(tvShow)),
+  );
+
+  const coverImageUrls: Record<string, string> = {};
+
+  for (const result of enrichedResults) {
+    if (result.status === 'fulfilled' && result.value.coverImageUrl) {
+      coverImageUrls[result.value.tvShow.title] = result.value.coverImageUrl;
+    }
+  }
+
+  return coverImageUrls;
+}
+
+export async function searchTvShows(
+  signal?: AbortSignal,
+): Promise<PaginatedTvShowsResult> {
   const response = await internalApiRequest<SearchResponse<RawTvShow>>(
     `${tvShowsBasePath}/search`,
     {
@@ -34,8 +69,10 @@ export async function searchTvShows(signal?: AbortSignal): Promise<
     },
   );
 
+  const coverImageUrls = await enrichTvShowsWithCoverImages(response.result);
+
   return {
-    items: mapRawTvShowsToViewModels(response.result),
+    items: mapRawTvShowsToViewModels(response.result, coverImageUrls),
     bookmark: response.metadata?.bookmark ?? null,
     fetchedRecordsCount:
       response.metadata?.fetchedRecordsCount ??
@@ -61,8 +98,10 @@ export async function searchPaginatedTvShows(
     },
   );
 
+  const coverImageUrls = await enrichTvShowsWithCoverImages(response.result);
+
   return {
-    items: mapRawTvShowsToViewModels(response.result),
+    items: mapRawTvShowsToViewModels(response.result, coverImageUrls),
     bookmark: response.metadata?.bookmark ?? null,
     fetchedRecordsCount:
       response.metadata?.fetchedRecordsCount ??
@@ -84,7 +123,9 @@ export async function readTvShow(
     },
   );
 
-  return mapRawTvShowToViewModel(response);
+  const { tvShow, coverImageUrl } = await enrichTvShowWithCoverImage(response);
+
+  return mapRawTvShowToViewModel(tvShow, coverImageUrl);
 }
 
 export async function createTvShow(
@@ -98,7 +139,9 @@ export async function createTvShow(
     },
   );
 
-  return mapRawTvShowsToViewModels(response);
+  const coverImageUrls = await enrichTvShowsWithCoverImages(response);
+
+  return mapRawTvShowsToViewModels(response, coverImageUrls);
 }
 
 export async function updateTvShow(
@@ -112,7 +155,9 @@ export async function updateTvShow(
     },
   );
 
-  return mapRawTvShowToViewModel(response);
+  const { tvShow, coverImageUrl } = await enrichTvShowWithCoverImage(response);
+
+  return mapRawTvShowToViewModel(tvShow, coverImageUrl);
 }
 
 export async function deleteTvShow(key: TvShowKey): Promise<TvShowViewModel> {
@@ -124,5 +169,7 @@ export async function deleteTvShow(key: TvShowKey): Promise<TvShowViewModel> {
     },
   );
 
-  return mapRawTvShowToViewModel(response);
+  const { tvShow, coverImageUrl } = await enrichTvShowWithCoverImage(response);
+
+  return mapRawTvShowToViewModel(tvShow, coverImageUrl);
 }

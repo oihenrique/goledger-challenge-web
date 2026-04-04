@@ -139,10 +139,7 @@ export function HomePage() {
               <CarouselContent>
                 {featuredToday.map((tvShow) => (
                   <CarouselItem key={tvShow.key}>
-                    <Card
-                      className="overflow-hidden rounded-[2rem] border border-white/10 bg-card py-0 shadow-none transition hover:border-white/20"
-                      asChild
-                    >
+                    <Card className="overflow-hidden rounded-[2rem] border border-white/10 bg-card py-0 shadow-none transition hover:border-white/20">
                       <Link
                         href={`/tv-shows/${encodeURIComponent(tvShow.title)}`}
                         className="block"

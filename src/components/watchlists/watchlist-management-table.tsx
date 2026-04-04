@@ -29,7 +29,7 @@ export function WatchlistManagementTable({
   }
 
   function handleRowKeyDown(
-    event: React.KeyboardEvent<HTMLTableRowElement>,
+    event: React.KeyboardEvent<HTMLLIElement>,
     watchlist: WatchlistViewModel,
   ) {
     if (event.key === 'Enter' || event.key === ' ') {

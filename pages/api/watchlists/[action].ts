@@ -16,7 +16,7 @@ export default createDomainApiHandler({
   updateSchema: updateWatchlistSchema,
   keySchema: watchlistKeySchema,
   buildSearchSelector: ({ searchTerm }) => {
-    if (!searchTerm) {
+    if (!searchTerm || typeof searchTerm !== 'string') {
       return {
         '@assetType': assetTypes.watchlist,
       };

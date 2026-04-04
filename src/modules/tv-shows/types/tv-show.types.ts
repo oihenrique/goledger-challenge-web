@@ -44,6 +44,7 @@ export interface TvShowViewModel {
   updatedAt: string;
   lastTransaction: string;
   lastTransactionId: string;
+  coverImageUrl?: string;
 }
 
 export interface SearchTvShowsParams {

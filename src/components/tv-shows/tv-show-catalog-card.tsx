@@ -50,7 +50,20 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
         className="cursor-pointer rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0 transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <CardHeader className="px-0">
-          <div className="h-44 border-b border-white/10 bg-[#2a2c31]" />
+          <div className="relative h-44 border-b border-white/10 bg-[#2a2c31] overflow-hidden">
+            {tvShow.coverImageUrl ? (
+              <img
+                src={tvShow.coverImageUrl}
+                alt={`${tvShow.title} cover`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                No image available
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent className="space-y-5 px-5 pb-0">
           <div className="space-y-3">

@@ -16,7 +16,7 @@ export default createDomainApiHandler({
   updateSchema: updateTvShowSchema,
   keySchema: tvShowKeySchema,
   buildSearchSelector: ({ searchTerm }) => {
-    if (!searchTerm) {
+    if (!searchTerm || typeof searchTerm !== 'string') {
       return {
         '@assetType': assetTypes.tvShows,
       };

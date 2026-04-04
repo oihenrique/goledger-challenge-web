@@ -48,20 +48,28 @@ export function TvShowInfoModal({ onClose, tvShow }: TvShowInfoModalProps) {
           </CardHeader>
           <CardContent className="grid gap-6 px-6 py-6 lg:grid-cols-[0.7fr_1fr]">
             <div className="min-h-72 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#2a2c31]">
-              <div className="flex h-full flex-col justify-between bg-[linear-gradient(180deg,rgba(42,44,49,0.24),rgba(15,23,42,0.92))] p-5">
-                <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                  TV show artwork
+              {tvShow.coverImageUrl ? (
+                <img
+                  src={tvShow.coverImageUrl}
+                  alt={`${tvShow.title} cover`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full min-h-72 flex-col justify-between bg-[linear-gradient(180deg,rgba(42,44,49,0.24),rgba(15,23,42,0.92))] p-5">
+                  <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                    TV show artwork
+                  </div>
+                  <div className="space-y-3">
+                    <p className="text-lg font-medium text-white">
+                      {tvShow.title}
+                    </p>
+                    <p className="text-sm leading-7 text-[#d5d0c5]">
+                      Visual space reserved for future catalog imagery and
+                      richer editorial art direction.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-3">
-                  <p className="text-lg font-medium text-white">
-                    {tvShow.title}
-                  </p>
-                  <p className="text-sm leading-7 text-[#d5d0c5]">
-                    Visual space reserved for future catalog imagery and richer
-                    editorial art direction.
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
             <div className="space-y-5">
               <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">

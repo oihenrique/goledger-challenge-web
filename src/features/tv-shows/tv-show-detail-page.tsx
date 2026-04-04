@@ -120,21 +120,31 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
 
               <Card className="overflow-hidden rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
                 <div className="relative min-h-104 bg-[#2a2c31]">
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,44,49,0.18),rgba(15,23,42,0.94))]" />
-                  <div className="relative flex h-full min-h-104 flex-col justify-between p-6">
-                    <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                      TV show cover
-                    </div>
-                    <div className="space-y-3">
-                      <p className="text-xl font-medium text-white">
-                        {data.title}
-                      </p>
-                      <p className="max-w-sm text-sm leading-7 text-[#d5d0c5]">
-                        Reserved visual area for future cover artwork, posters
-                        or editorial imagery tied to this title.
-                      </p>
-                    </div>
-                  </div>
+                  {data.coverImageUrl ? (
+                    <img
+                      src={data.coverImageUrl}
+                      alt={`${data.title} cover`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,44,49,0.18),rgba(15,23,42,0.94))]" />
+                      <div className="relative flex h-full min-h-104 flex-col justify-between p-6">
+                        <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                          TV show cover
+                        </div>
+                        <div className="space-y-3">
+                          <p className="text-xl font-medium text-white">
+                            {data.title}
+                          </p>
+                          <p className="max-w-sm text-sm leading-7 text-[#d5d0c5]">
+                            Reserved visual area for future cover artwork,
+                            posters or editorial imagery tied to this title.
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Card>
             </div>
