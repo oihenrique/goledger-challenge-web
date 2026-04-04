@@ -64,6 +64,13 @@ export interface EpisodeViewModel {
   lastTransaction: string;
 }
 
+export interface EpisodeRelationViewModel extends EpisodeViewModel {
+  seasonNumber?: number;
+  seasonYear?: number;
+  tvShowKey?: string;
+  tvShowTitle?: string;
+}
+
 export interface SearchEpisodesParams {
   bookmark?: string;
   limit?: number;

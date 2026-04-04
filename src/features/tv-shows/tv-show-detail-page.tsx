@@ -19,6 +19,11 @@ import { PageShell } from '@/layout/page-shell';
 import { useEpisodes } from '@/modules/episodes/hooks/use-episodes';
 import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
 import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
+import {
+  getOrderedTvShowSeasons,
+  mapEpisodesToRelationViewModels,
+  resolveActiveSeason,
+} from '@/modules/tv-shows/utils/tv-show-relations';
 import { assetTypes } from '@/shared/types';
 
 interface TvShowDetailPageProps {
@@ -37,32 +42,20 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
   );
   const seasonsQuery = useSeasons({ limit: relationBatchLimit });
 
-  const seasons =
-    data && seasonsQuery.data
-      ? seasonsQuery.data.items
-          .filter((season) => season.tvShowKey === data.key)
-          .sort(
-            (firstSeason, secondSeason) =>
-              firstSeason.number - secondSeason.number,
-          )
-      : [];
-  const activeSeasonKey =
-    selectedSeasonKey &&
-    seasons.some((season) => season.key === selectedSeasonKey)
-      ? selectedSeasonKey
-      : (seasons[0]?.key ?? null);
+  const seasons = getOrderedTvShowSeasons(
+    seasonsQuery.data?.items ?? [],
+    data ?? null,
+  );
+  const selectedSeason = resolveActiveSeason(seasons, selectedSeasonKey);
+  const activeSeasonKey = selectedSeason?.key ?? null;
   const episodesQuery = useEpisodes({
-    limit: relationBatchLimit,
     seasonKey: activeSeasonKey ?? undefined,
   });
-  const selectedSeason =
-    seasons.find((season) => season.key === activeSeasonKey) ?? null;
-  const episodesForSelectedSeason = selectedSeason
-    ? (episodesQuery.data?.items ?? []).sort(
-        (firstEpisode, secondEpisode) =>
-          firstEpisode.episodeNumber - secondEpisode.episodeNumber,
-      )
-    : [];
+  const episodesForSelectedSeason = mapEpisodesToRelationViewModels(
+    episodesQuery.data?.items ?? [],
+    selectedSeason,
+    data ?? null,
+  );
 
   const isRelationsLoading = seasonsQuery.isLoading || episodesQuery.isLoading;
   const isRelationsError = seasonsQuery.isError || episodesQuery.isError;

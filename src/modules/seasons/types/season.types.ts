@@ -48,6 +48,10 @@ export interface SeasonViewModel {
   lastTransaction: string;
 }
 
+export interface SeasonRelationViewModel extends SeasonViewModel {
+  tvShowTitle?: string;
+}
+
 export interface SearchSeasonsParams {
   bookmark?: string;
   limit?: number;

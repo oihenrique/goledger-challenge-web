@@ -50,10 +50,16 @@ import {
 import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
 import type {
   CreateSeasonInput,
+  SeasonRelationViewModel,
   SeasonViewModel,
   UpdateSeasonInput,
 } from '@/modules/seasons/types/season.types';
 import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
+import {
+  getOrderedTvShowSeasons,
+  mapEpisodesToRelationViewModels,
+  resolveActiveSeason,
+} from '@/modules/tv-shows/utils/tv-show-relations';
 import { assetTypes } from '@/shared/types';
 
 interface ManageTvShowRelationsPageProps {
@@ -116,28 +122,21 @@ export function ManageTvShowRelationsPage({
   const [currentEpisodePage, setCurrentEpisodePage] = useState(1);
 
   const tvShow = tvShowQuery.data ?? null;
-  const seasons =
-    tvShow && seasonsQuery.data
-      ? seasonsQuery.data.items
-          .filter((season) => season.tvShowKey === tvShow.key)
-          .sort((left, right) => left.number - right.number)
-      : [];
-  const activeSeasonKey =
-    selectedSeasonKey &&
-    seasons.some((season) => season.key === selectedSeasonKey)
-      ? selectedSeasonKey
-      : (seasons[0]?.key ?? null);
-  const selectedSeason =
-    seasons.find((season) => season.key === activeSeasonKey) ?? null;
+  const seasons = getOrderedTvShowSeasons(
+    seasonsQuery.data?.items ?? [],
+    tvShow,
+  );
+  const selectedSeason = resolveActiveSeason(seasons, selectedSeasonKey);
+  const activeSeasonKey = selectedSeason?.key ?? null;
 
   const episodesQuery = useEpisodes({
     seasonKey: activeSeasonKey ?? undefined,
   });
-  const allEpisodes = selectedSeason
-    ? [...(episodesQuery.data?.items ?? [])].sort(
-        (left, right) => left.episodeNumber - right.episodeNumber,
-      )
-    : [];
+  const allEpisodes = mapEpisodesToRelationViewModels(
+    episodesQuery.data?.items ?? [],
+    selectedSeason,
+    tvShow,
+  );
   const totalEpisodePages = Math.max(
     1,
     Math.ceil(allEpisodes.length / episodesPerPage),
@@ -170,7 +169,7 @@ export function ManageTvShowRelationsPage({
     setSeasonFormMode('create');
   }
 
-  function openEditSeasonModal(season: SeasonViewModel) {
+  function openEditSeasonModal(season: SeasonRelationViewModel) {
     setSeasonInFocus(season);
     setSeasonFormMode('edit');
   }
