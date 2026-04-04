@@ -11,7 +11,7 @@ const workspaceItems = [
   { href: '/manage/tv-shows', label: 'Series' },
   { href: '#', label: 'Seasons' },
   { href: '#', label: 'Episodes' },
-  { href: '#', label: 'Watchlists' },
+  { href: '/manage/watchlists', label: 'Watchlists' },
 ];
 
 export function ProfileMenu() {

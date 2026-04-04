@@ -47,3 +47,15 @@ export interface WatchlistViewModel {
   lastTransaction: string;
   lastTransactionId: string;
 }
+
+export interface SearchWatchlistsParams {
+  bookmark?: string;
+  limit?: number;
+  searchTerm?: string;
+}
+
+export interface PaginatedWatchlistsResult {
+  items: WatchlistViewModel[];
+  bookmark: string | null;
+  fetchedRecordsCount: number | null;
+}

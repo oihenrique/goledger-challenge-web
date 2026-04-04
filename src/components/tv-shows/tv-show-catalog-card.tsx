@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { TvShowInfoModal } from '@/components/tv-shows/tv-show-info-modal';
+import { TvShowWatchlistModal } from '@/components/tv-shows/tv-show-watchlist-modal';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 
 interface TvShowCatalogCardProps {
@@ -24,6 +25,7 @@ function createTvShowHref(title: string): string {
 export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
   const router = useRouter();
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isWatchlistModalOpen, setIsWatchlistModalOpen] = useState(false);
   const href = createTvShowHref(tvShow.title);
 
   function handleNavigateToTvShow() {
@@ -65,10 +67,11 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
             className="w-full"
             onClick={(event) => {
               event.stopPropagation();
+              setIsWatchlistModalOpen(true);
             }}
           >
             <Plus className="size-4" />
-            <span>Wishlist</span>
+            <span>Watchlist</span>
           </Button>
           <Button
             variant="outline"
@@ -85,6 +88,12 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
       </Card>
       {isInfoOpen ? (
         <TvShowInfoModal tvShow={tvShow} onClose={() => setIsInfoOpen(false)} />
+      ) : null}
+      {isWatchlistModalOpen ? (
+        <TvShowWatchlistModal
+          tvShow={tvShow}
+          onClose={() => setIsWatchlistModalOpen(false)}
+        />
       ) : null}
     </>
   );

@@ -19,7 +19,7 @@ export function SiteHeader() {
             Community catalog
           </div>
           <Button variant="outline" size="sm" asChild>
-            <Link href="#" className="flex items-center gap-2">
+            <Link href="/manage/watchlists" className="flex items-center gap-2">
               <BookmarkPlus className="size-4 text-[#c59a52]" />
               <span className="hidden sm:inline">Watchlists</span>
             </Link>
