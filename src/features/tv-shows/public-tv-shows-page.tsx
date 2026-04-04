@@ -78,34 +78,21 @@ export function PublicTvShowsPage() {
         aria-busy={isLoading}
         aria-live="polite"
       >
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-          <div className="space-y-4">
-            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-              Public catalog
-            </p>
-            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              Discover TV shows through a community-driven editorial catalog.
-            </h1>
-            <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
-              This public-facing surface emphasizes discovery, context, and
-              narrative. Administrative CRUD stays in the editorial workspace.
-            </p>
-          </div>
-          <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-            <CardContent className="px-6 py-6">
-              <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                Workspace split
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[#d5d0c5]">
-                Need operational control instead of discovery? Move into the
-                editorial workspace to manage the catalog through tables and
-                CRUD flows.
-              </p>
-              <Button className="mt-5" variant="outline" asChild>
-                <Link href="/manage/tv-shows">Open TV show management</Link>
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="space-y-4">
+          <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+            Discover TV shows through a community-driven catalog
+          </h1>
+          <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
+            This catalog is built and maintained by the community. If you want
+            to see a TV show added, you can{' '}
+            <Link
+              href="/manage/tv-shows"
+              className="font-medium text-primary underline-offset-4 transition-colors hover:underline"
+            >
+              add it yourself
+            </Link>{' '}
+            or request it to be added by a administrator.
+          </p>
         </div>
 
         <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
@@ -199,7 +186,7 @@ export function PublicTvShowsPage() {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                Batch {currentPage}. The current cursor returned an empty batch.
+                Batch {currentPage}. No results.
               </p>
               <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                 <PaginationContent>
@@ -245,10 +232,7 @@ export function PublicTvShowsPage() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 Batch {currentPage}. Showing up to {tvShowsPerPage} series per
-                request
-                {hasNextPage
-                  ? '. More results available.'
-                  : '. End of current result set.'}
+                request.
               </p>
               <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                 <PaginationContent>

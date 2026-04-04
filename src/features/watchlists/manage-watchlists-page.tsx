@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -188,21 +187,15 @@ export function ManageWatchlistsPage() {
         >
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                Editorial workspace
-              </p>
               <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                Manage watchlists with a table-first workflow.
+                Manage watchlists
               </h1>
               <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
                 Create watchlists here, then open each one to add or remove TV
-                show items with a focused management flow.
+                show items.
               </p>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" asChild>
-                <Link href="/manage/tv-shows">Back to TV shows</Link>
-              </Button>
               <Button onClick={openCreateModal}>Create watchlist</Button>
             </div>
           </div>
@@ -283,8 +276,7 @@ export function ManageWatchlistsPage() {
 
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
-                  Page {currentPage}. The current cursor returned an empty
-                  batch.
+                  Page {currentPage}. No results.
                 </p>
                 <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                   <PaginationContent>
@@ -330,10 +322,7 @@ export function ManageWatchlistsPage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Page {currentPage}. Showing up to {watchlistsPerPage}{' '}
-                  watchlists per request
-                  {hasNextPage
-                    ? '. More results available.'
-                    : '. End of current result set.'}
+                  watchlists per request.
                 </p>
                 <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                   <PaginationContent>

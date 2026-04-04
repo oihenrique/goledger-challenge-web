@@ -385,9 +385,6 @@ export function ManageTvShowRelationsPage({
             <>
               <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                 <div className="space-y-4">
-                  <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                    Relational workspace
-                  </p>
                   <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
                     Manage seasons and episodes for {tvShow.title}.
                   </h1>
@@ -660,19 +657,34 @@ export function ManageTvShowRelationsPage({
                               <table className="min-w-full divide-y divide-white/10">
                                 <thead className="bg-[#2a2c31]">
                                   <tr className="text-left text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                                    <th scope="col" className="px-5 py-4 font-medium">
+                                    <th
+                                      scope="col"
+                                      className="px-5 py-4 font-medium"
+                                    >
                                       Episode
                                     </th>
-                                    <th scope="col" className="px-5 py-4 font-medium">
+                                    <th
+                                      scope="col"
+                                      className="px-5 py-4 font-medium"
+                                    >
                                       Description
                                     </th>
-                                    <th scope="col" className="px-5 py-4 font-medium">
+                                    <th
+                                      scope="col"
+                                      className="px-5 py-4 font-medium"
+                                    >
                                       Release date
                                     </th>
-                                    <th scope="col" className="px-5 py-4 font-medium">
+                                    <th
+                                      scope="col"
+                                      className="px-5 py-4 font-medium"
+                                    >
                                       Rating
                                     </th>
-                                    <th scope="col" className="px-5 py-4 font-medium">
+                                    <th
+                                      scope="col"
+                                      className="px-5 py-4 font-medium"
+                                    >
                                       Actions
                                     </th>
                                   </tr>

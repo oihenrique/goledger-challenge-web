@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ExternalLink, Layers2, X } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 
 import { Button, Dialog, DialogContent } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
@@ -67,10 +67,6 @@ export function TvShowInfoModal({ onClose, tvShow }: TvShowInfoModalProps) {
               <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
                 <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
                   Recommended age: {tvShow.recommendedAge}+
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                  <Layers2 className="size-4 text-muted-foreground" />
-                  Ready for TV show hub
                 </div>
               </div>
               <div className="space-y-3">

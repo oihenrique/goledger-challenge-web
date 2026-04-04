@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookmarkPlus } from 'lucide-react';
+import { BookmarkPlus, Tv } from 'lucide-react';
 
 import { ProfileMenu } from '@/components/shared/profile-menu';
 import { Button } from '@/components/ui';
@@ -15,9 +15,12 @@ export function SiteHeader() {
           GoStream
         </Link>
         <div className="flex items-center gap-3 sm:gap-5">
-          <div className="hidden rounded-full border border-white/10 bg-[#26282d] px-3 py-2 text-xs uppercase tracking-[0.22em] text-muted-foreground lg:inline-flex">
-            Community catalog
-          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/tv-shows" className="flex items-center gap-2">
+              <Tv className="size-4 text-[#7aa2ff]" />
+              <span className="hidden sm:inline">TV Shows</span>
+            </Link>
+          </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href="/manage/watchlists" className="flex items-center gap-2">
               <BookmarkPlus className="size-4 text-[#c59a52]" />

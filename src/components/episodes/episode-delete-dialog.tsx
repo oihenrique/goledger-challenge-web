@@ -46,7 +46,9 @@ export function EpisodeDeleteDialog({
                 </CardTitle>
                 <p className="text-sm leading-7 text-[#d5d0c5]">
                   This removes{' '}
-                  <span className="font-medium text-white">{episode.title}</span>{' '}
+                  <span className="font-medium text-white">
+                    {episode.title}
+                  </span>{' '}
                   from season {seasonNumber} of{' '}
                   <span className="font-medium text-white">{tvShowTitle}</span>.
                 </p>

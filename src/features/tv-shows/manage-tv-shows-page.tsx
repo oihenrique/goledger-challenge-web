@@ -190,11 +190,12 @@ export function ManageTvShowsPage() {
                 Editorial workspace
               </p>
               <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                Manage TV shows through an operational catalog table.
+                Manage TV shows
               </h1>
               <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
-                This administrative surface is focused on productivity, audit,
-                and future CRUD actions. Discovery lives in the public catalog.
+                Manage the TV shows registered in our catalog. Navigate through
+                our collection, and click on a TV show to edit its details or
+                delete it from the catalog.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -205,44 +206,16 @@ export function ManageTvShowsPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[1fr_0.72fr]">
-            <div className="rounded-3xl border border-white/10 bg-card p-4 sm:p-5">
-              <SearchInputGroup
-                id="manage-tv-show-search"
-                label="Search"
-                value={searchInput}
-                placeholder="Filter by title or description"
-                onChange={setSearchInput}
-                onClear={handleClearSearch}
-                onSubmit={handleSearchSubmit}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-3xl border border-white/10 bg-card p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Batch count
-                </p>
-                <p className="mt-4 text-3xl font-semibold text-white">
-                  {data?.fetchedRecordsCount ?? tvShows.length}
-                </p>
-              </div>
-              <div className="rounded-3xl border border-white/10 bg-card p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Current batch
-                </p>
-                <p className="mt-4 text-3xl font-semibold text-white">
-                  {currentPage}
-                </p>
-              </div>
-              <div className="rounded-3xl border border-white/10 bg-card p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Batch size
-                </p>
-                <p className="mt-4 text-lg font-semibold text-white">
-                  {tvShowsPerPage} per request
-                </p>
-              </div>
-            </div>
+          <div className="rounded-3xl border border-white/10 bg-card p-4 sm:p-5">
+            <SearchInputGroup
+              id="manage-tv-show-search"
+              label="Search"
+              value={searchInput}
+              placeholder="Filter by title or description"
+              onChange={setSearchInput}
+              onClear={handleClearSearch}
+              onSubmit={handleSearchSubmit}
+            />
           </div>
 
           {isLoading ? (
@@ -302,8 +275,7 @@ export function ManageTvShowsPage() {
 
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
-                  Batch {currentPage}. The current cursor returned an empty
-                  batch.
+                  Batch {currentPage}. No results.
                 </p>
                 <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                   <PaginationContent>
@@ -349,10 +321,7 @@ export function ManageTvShowsPage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Batch {currentPage}. Showing up to {tvShowsPerPage} titles per
-                  workspace request
-                  {hasNextPage
-                    ? '. More results available.'
-                    : '. End of current result set.'}
+                  workspace request.
                 </p>
                 <Pagination className="mx-0 w-auto justify-start sm:justify-end">
                   <PaginationContent>

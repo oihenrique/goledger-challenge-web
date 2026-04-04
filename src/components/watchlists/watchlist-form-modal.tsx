@@ -106,9 +106,6 @@ export function WatchlistFormModal({
           <CardHeader className="border-b border-white/10 px-6 py-5">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-3">
-                <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                  Watchlist form
-                </div>
                 <div className="space-y-2">
                   <CardTitle className="text-2xl font-semibold text-white">
                     {mode === 'create'
@@ -143,7 +140,10 @@ export function WatchlistFormModal({
                     className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
                     {...register('title')}
                   />
-                  <FieldError errors={[errors.title]} className="text-rose-200" />
+                  <FieldError
+                    errors={[errors.title]}
+                    className="text-rose-200"
+                  />
                 </FieldContent>
               </Field>
 

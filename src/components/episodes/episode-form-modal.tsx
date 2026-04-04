@@ -18,10 +18,7 @@ import {
   FieldLabel,
   Input,
 } from '@/components/ui';
-import {
-  toDateInputValue,
-  toIsoDateTimeFromDateInput,
-} from '@/lib/date';
+import { toDateInputValue, toIsoDateTimeFromDateInput } from '@/lib/date';
 import type {
   CreateEpisodeInput,
   EpisodeViewModel,
@@ -141,9 +138,6 @@ export function EpisodeFormModal({
         <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none">
           <CardHeader className="border-b border-white/10 px-6 py-5">
             <div className="space-y-3">
-              <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                Episode form
-              </div>
               <div className="space-y-2">
                 <CardTitle className="text-2xl font-semibold text-white">
                   {mode === 'create'
@@ -155,7 +149,9 @@ export function EpisodeFormModal({
                   <span className="font-medium text-white">
                     {season.number}
                   </span>{' '}
-                  of <span className="font-medium text-white">{tvShow.title}</span>.
+                  of{' '}
+                  <span className="font-medium text-white">{tvShow.title}</span>
+                  .
                 </p>
               </div>
             </div>
@@ -220,7 +216,10 @@ export function EpisodeFormModal({
                           value === '' ? undefined : Number(value),
                       })}
                     />
-                    <FieldError errors={[errors.rating]} className="text-rose-200" />
+                    <FieldError
+                      errors={[errors.rating]}
+                      className="text-rose-200"
+                    />
                   </FieldContent>
                 </Field>
               </div>
@@ -239,7 +238,10 @@ export function EpisodeFormModal({
                     className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
                     {...register('title')}
                   />
-                  <FieldError errors={[errors.title]} className="text-rose-200" />
+                  <FieldError
+                    errors={[errors.title]}
+                    className="text-rose-200"
+                  />
                 </FieldContent>
               </Field>
 
@@ -289,12 +291,17 @@ export function EpisodeFormModal({
 
               <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 {mode === 'create' ? (
-                  <Field orientation="horizontal" className="items-center gap-2">
+                  <Field
+                    orientation="horizontal"
+                    className="items-center gap-2"
+                  >
                     <input
                       id="episode-create-another"
                       type="checkbox"
                       checked={createAnother}
-                      onChange={(event) => setCreateAnother(event.target.checked)}
+                      onChange={(event) =>
+                        setCreateAnother(event.target.checked)
+                      }
                       className="size-4 rounded border border-white/20 bg-[#2a2c31] accent-[#b58d47]"
                     />
                     <FieldContent>

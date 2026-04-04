@@ -22,9 +22,7 @@ import { assetTypes } from '@/shared/types';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 import { useWatchlists } from '@/modules/watchlists/hooks/use-watchlists';
 import { useUpdateWatchlist } from '@/modules/watchlists/hooks/use-watchlist-mutations';
-import {
-  buildWatchlistTvShowReferences,
-} from '@/modules/watchlists/utils/watchlist-relations';
+import { buildWatchlistTvShowReferences } from '@/modules/watchlists/utils/watchlist-relations';
 import type { WatchlistViewModel } from '@/modules/watchlists/types/watchlist.types';
 
 interface TvShowWatchlistModalProps {
@@ -64,7 +62,9 @@ export function TvShowWatchlistModal({
     }
 
     if (selectedWatchlistAlreadyContainsTvShow) {
-      toast.message(`${tvShow.title} is already in ${selectedWatchlist.title}.`);
+      toast.message(
+        `${tvShow.title} is already in ${selectedWatchlist.title}.`,
+      );
       return;
     }
 
@@ -100,9 +100,6 @@ export function TvShowWatchlistModal({
           <CardHeader className="border-b border-white/10 px-6 py-5">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-3">
-                <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                  Add to watchlist
-                </div>
                 <div className="space-y-2">
                   <CardTitle className="text-2xl font-semibold text-white">
                     Choose a watchlist for {tvShow.title}

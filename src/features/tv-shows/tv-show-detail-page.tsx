@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { ChevronLeft, Layers2, ListVideo, Sparkles } from 'lucide-react';
+import { ChevronLeft, Layers2, ListVideo } from 'lucide-react';
 
-import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
 import { TvShowEpisodeCard } from '@/components/tv-shows/tv-show-episode-card';
 import { TvShowRelationsSkeleton } from '@/components/tv-shows/tv-show-relations-skeleton';
 import { Button } from '@/components/ui';
@@ -72,9 +71,6 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
               <span>Back to catalog</span>
             </Link>
           </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/manage/tv-shows">Open editorial workspace</Link>
-          </Button>
         </div>
 
         {isLoading ? (
@@ -116,10 +112,6 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
                   <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
                     Recommended age: {data.recommendedAge}+
                   </div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                    <Sparkles className="size-4 text-muted-foreground" />
-                    Public discovery detail
-                  </div>
                 </div>
                 <p className="max-w-3xl text-base leading-8 text-[#d5d0c5]">
                   {data.description}
@@ -148,17 +140,6 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
             </div>
 
             <div className="space-y-6">
-              <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-                <CardContent className="px-6 py-6">
-                  <BlockchainRecordPanel
-                    assetKey={data.key}
-                    lastTransaction={data.lastTransaction}
-                    lastTransactionId={data.lastTransactionId}
-                    updatedAt={data.updatedAt}
-                  />
-                </CardContent>
-              </Card>
-
               <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
                 <CardHeader className="space-y-4 px-6 py-6">
                   <div className="space-y-2">

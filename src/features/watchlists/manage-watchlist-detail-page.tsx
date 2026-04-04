@@ -286,7 +286,11 @@ export function ManageWatchlistDetailPage({
           </div>
 
           {watchlistQuery.isLoading ? (
-            <div role="status" aria-label="Loading watchlist" className="space-y-6">
+            <div
+              role="status"
+              aria-label="Loading watchlist"
+              className="space-y-6"
+            >
               <div className="h-16 w-1/2 rounded-3xl border border-white/10 bg-card" />
               <div className="h-120 rounded-3xl border border-white/10 bg-card" />
             </div>
@@ -355,7 +359,7 @@ export function ManageWatchlistDetailPage({
                       </p>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-5 px-6 py-6">
+                  <CardContent className="space-y-5 px-6 pb-6">
                     <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-end">
                       <div className="flex-1">
                         <SearchInputGroup
@@ -372,8 +376,7 @@ export function ManageWatchlistDetailPage({
                         <Button
                           type="button"
                           disabled={
-                            !selectedSearchResultKey ||
-                            updateMutation.isPending
+                            !selectedSearchResultKey || updateMutation.isPending
                           }
                           onClick={() => void handleConfirmSelection()}
                         >
@@ -484,50 +487,54 @@ export function ManageWatchlistDetailPage({
                     ) : linkedTvShows.length > 0 ? (
                       <div className="space-y-5">
                         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#1f2126]">
-                        <ul className="divide-y divide-white/10">
-                          {paginatedLinkedTvShows.map((tvShow, index) => (
-                            <li key={tvShow.key} className="px-4 py-4 sm:px-5">
-                              <div className="flex items-start gap-4">
-                                <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
-                                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
-                                </div>
-                                <div className="min-w-0 flex-1 space-y-3">
-                                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                    <div className="min-w-0">
-                                      <p className="truncate text-2xl font-semibold text-white">
-                                        {(safeCurrentItemsPage - 1) *
-                                          watchlistItemsPerPage +
-                                          index +
-                                          1}
-                                        . {tvShow.title}
-                                      </p>
-                                      <p className="text-sm text-[#d5d0c5]">
-                                        Recommended age {tvShow.recommendedAge}+
-                                      </p>
-                                    </div>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        void handleRemoveTvShow(tvShow)
-                                      }
-                                    >
-                                      <Trash2 className="size-4" />
-                                      <span>Remove</span>
-                                    </Button>
+                          <ul className="divide-y divide-white/10">
+                            {paginatedLinkedTvShows.map((tvShow, index) => (
+                              <li
+                                key={tvShow.key}
+                                className="px-4 py-4 sm:px-5"
+                              >
+                                <div className="flex items-start gap-4">
+                                  <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
+                                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
                                   </div>
+                                  <div className="min-w-0 flex-1 space-y-3">
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                      <div className="min-w-0">
+                                        <p className="truncate text-2xl font-semibold text-white">
+                                          {(safeCurrentItemsPage - 1) *
+                                            watchlistItemsPerPage +
+                                            index +
+                                            1}
+                                          . {tvShow.title}
+                                        </p>
+                                        <p className="text-sm text-[#d5d0c5]">
+                                          Recommended age{' '}
+                                          {tvShow.recommendedAge}+
+                                        </p>
+                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          void handleRemoveTvShow(tvShow)
+                                        }
+                                      >
+                                        <Trash2 className="size-4" />
+                                        <span>Remove</span>
+                                      </Button>
+                                    </div>
 
-                                  <p
-                                    className="line-clamp-2 text-sm leading-7 text-muted-foreground"
-                                    title={tvShow.description}
-                                  >
-                                    {tvShow.description}
-                                  </p>
+                                    <p
+                                      className="line-clamp-2 text-sm leading-7 text-muted-foreground"
+                                      title={tvShow.description}
+                                    >
+                                      {tvShow.description}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
 
                         {totalItemsPages > 1 ? (
