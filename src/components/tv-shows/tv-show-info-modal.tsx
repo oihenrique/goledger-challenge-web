@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ExternalLink, Layers2, Plus, X } from 'lucide-react';
+import { ExternalLink, Layers2, X } from 'lucide-react';
 
 import { Button, Dialog, DialogContent } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';

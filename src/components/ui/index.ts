@@ -1,6 +1,7 @@
 export * from './button';
 export * from './button-group';
 export * from './card';
+export * from './carousel';
 export * from './dialog';
 export * from './dropdown-menu';
 export * from './empty';
