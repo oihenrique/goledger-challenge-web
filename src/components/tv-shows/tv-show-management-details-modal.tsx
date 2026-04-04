@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { X } from 'lucide-react';
 
+import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
 import { Button, Dialog, DialogContent } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { formatTimestamp, toTimestamp } from '@/lib/date';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
 
 interface TvShowManagementDetailsModalProps {
@@ -16,11 +16,6 @@ export function TvShowManagementDetailsModal({
   tvShow,
 }: TvShowManagementDetailsModalProps) {
   const publicDetailHref = `/tv-shows/${encodeURIComponent(tvShow.title)}`;
-  const lastSyncTimestamp = toTimestamp(tvShow.updatedAt);
-  const formattedLastSync = formatTimestamp(tvShow.updatedAt, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
 
   return (
     <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
@@ -69,41 +64,12 @@ export function TvShowManagementDetailsModal({
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Asset key
-              </p>
-              <p className="mt-2 break-all text-sm text-[#ebe5d8]">
-                {tvShow.key}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Blockchain action
-              </p>
-              <p className="mt-2 text-sm text-[#ebe5d8]">
-                {tvShow.lastTransaction}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Transaction id
-              </p>
-              <p className="mt-2 break-all text-sm text-[#ebe5d8]">
-                {tvShow.lastTransactionId}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Last sync point
-              </p>
-              <p className="mt-2 text-sm text-[#ebe5d8]">{formattedLastSync}</p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                {lastSyncTimestamp !== null
-                  ? `Timestamp: ${lastSyncTimestamp}`
-                  : 'Timestamp unavailable'}
-              </p>
-            </div>
+            <BlockchainRecordPanel
+              assetKey={tvShow.key}
+              lastTransaction={tvShow.lastTransaction}
+              lastTransactionId={tvShow.lastTransactionId}
+              updatedAt={tvShow.updatedAt}
+            />
           </div>
         </CardContent>
         </Card>

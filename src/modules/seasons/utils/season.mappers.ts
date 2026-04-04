@@ -11,6 +11,7 @@ export function mapRawSeasonToViewModel(rawSeason: RawSeason): SeasonViewModel {
     tvShowKey: rawSeason.tvShow['@key'],
     updatedAt: rawSeason['@lastUpdated'],
     lastTransaction: rawSeason['@lastTx'],
+    lastTransactionId: rawSeason['@lastTxID'],
   };
 }
 

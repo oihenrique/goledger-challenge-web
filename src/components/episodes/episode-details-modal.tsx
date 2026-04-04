@@ -1,3 +1,4 @@
+import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
 import { Card, CardContent, CardHeader, CardTitle, Dialog, DialogContent } from '@/components/ui';
 import { formatDate } from '@/lib/date';
 import type { EpisodeViewModel } from '@/modules/episodes/types/episode.types';
@@ -72,22 +73,12 @@ export function EpisodeDetailsModal({
                   {episode.rating ?? 'Not rated'}
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Asset key
-                </p>
-                <p className="mt-2 break-all text-sm text-[#ebe5d8]">
-                  {episode.key}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Blockchain action
-                </p>
-                <p className="mt-2 text-sm text-[#ebe5d8]">
-                  {episode.lastTransaction}
-                </p>
-              </div>
+              <BlockchainRecordPanel
+                assetKey={episode.key}
+                lastTransaction={episode.lastTransaction}
+                lastTransactionId={episode.lastTransactionId}
+                updatedAt={episode.updatedAt}
+              />
             </div>
           </CardContent>
         </Card>

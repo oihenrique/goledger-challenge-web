@@ -62,6 +62,7 @@ export interface EpisodeViewModel {
   tvShowTitle?: string;
   updatedAt: string;
   lastTransaction: string;
+  lastTransactionId: string;
 }
 
 export interface EpisodeRelationViewModel extends EpisodeViewModel {

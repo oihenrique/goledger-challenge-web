@@ -1,7 +1,7 @@
 import { Layers2 } from 'lucide-react';
 
+import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
 import { Card, CardContent, CardHeader, CardTitle, Dialog, DialogContent } from '@/components/ui';
-import { formatTimestamp } from '@/lib/date';
 import type { SeasonViewModel } from '@/modules/seasons/types/season.types';
 
 interface SeasonDetailsModalProps {
@@ -52,33 +52,12 @@ export function SeasonDetailsModal({
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Asset key
-                </p>
-                <p className="mt-2 break-all text-sm text-[#ebe5d8]">
-                  {season.key}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Blockchain action
-                </p>
-                <p className="mt-2 text-sm text-[#ebe5d8]">
-                  {season.lastTransaction}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Last updated
-                </p>
-                <p className="mt-2 text-sm text-[#ebe5d8]">
-                  {formatTimestamp(season.updatedAt, {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  })}
-                </p>
-              </div>
+              <BlockchainRecordPanel
+                assetKey={season.key}
+                lastTransaction={season.lastTransaction}
+                lastTransactionId={season.lastTransactionId}
+                updatedAt={season.updatedAt}
+              />
             </div>
           </CardContent>
         </Card>

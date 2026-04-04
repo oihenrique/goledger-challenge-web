@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronLeft, Layers2, ListVideo, Sparkles } from 'lucide-react';
 
+import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
 import { TvShowEpisodeCard } from '@/components/tv-shows/tv-show-episode-card';
 import { TvShowRelationsSkeleton } from '@/components/tv-shows/tv-show-relations-skeleton';
 import { Button } from '@/components/ui';
@@ -147,6 +148,17 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
             </div>
 
             <div className="space-y-6">
+              <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
+                <CardContent className="px-6 py-6">
+                  <BlockchainRecordPanel
+                    assetKey={data.key}
+                    lastTransaction={data.lastTransaction}
+                    lastTransactionId={data.lastTransactionId}
+                    updatedAt={data.updatedAt}
+                  />
+                </CardContent>
+              </Card>
+
               <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
                 <CardHeader className="space-y-4 px-6 py-6">
                   <div className="space-y-2">

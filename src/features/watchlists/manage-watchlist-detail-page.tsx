@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 
 import { SearchInputGroup } from '@/components/shared/search-input-group';
 import { WatchlistDeleteDialog } from '@/components/watchlists/watchlist-delete-dialog';
+import { WatchlistDetailsModal } from '@/components/watchlists/watchlist-details-modal';
 import { WatchlistFormModal } from '@/components/watchlists/watchlist-form-modal';
 import {
   Button,
@@ -74,6 +75,7 @@ export function ManageWatchlistDetailPage({
     string | null
   >(null);
   const [currentItemsPage, setCurrentItemsPage] = useState(1);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -312,6 +314,12 @@ export function ManageWatchlistDetailPage({
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsDetailsModalOpen(true)}
+                  >
+                    Technical details
+                  </Button>
                   <Button
                     variant="outline"
                     onClick={() => setIsEditModalOpen(true)}
@@ -578,6 +586,13 @@ export function ManageWatchlistDetailPage({
           onClose={() => setIsEditModalOpen(false)}
           onSubmit={handleWatchlistSubmit}
           watchlist={watchlist}
+        />
+      ) : null}
+
+      {watchlist && isDetailsModalOpen ? (
+        <WatchlistDetailsModal
+          watchlist={watchlist}
+          onClose={() => setIsDetailsModalOpen(false)}
         />
       ) : null}
 
