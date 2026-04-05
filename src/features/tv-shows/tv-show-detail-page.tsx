@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronLeft, Layers2, ListVideo } from 'lucide-react';
 
+import { AppImage } from '@/components/shared/app-image';
 import { TvShowEpisodeCard } from '@/components/tv-shows/tv-show-episode-card';
 import { TvShowRelationsSkeleton } from '@/components/tv-shows/tv-show-relations-skeleton';
 import { Button } from '@/components/ui';
@@ -16,15 +17,21 @@ import {
 } from '@/components/ui';
 import { Skeleton } from '@/components/ui';
 import { PageShell } from '@/layout/page-shell';
-import { useEpisodes } from '@/modules/episodes/hooks/use-episodes';
-import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
-import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
+import {
+  useMultipleTmdbEpisodeImages,
+  getBestTmdbEpisodeImageUrl,
+  useTmdbTvShows,
+  getBestTmdbSeriesId,
+} from '@/modules/themoviedb';
 import {
   getOrderedTvShowSeasons,
   mapEpisodesToRelationViewModels,
   resolveActiveSeason,
 } from '@/modules/tv-shows/utils/tv-show-relations';
 import { assetTypes } from '@/shared/types';
+import { useTvShow } from '@/modules/tv-shows/hooks/use-tv-show';
+import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
+import { useEpisodes } from '@/modules/episodes/hooks/use-episodes';
 
 interface TvShowDetailPageProps {
   title: string;
@@ -56,6 +63,44 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
     selectedSeason,
     data ?? null,
   );
+
+  const tmdbQuery = useTmdbTvShows(data?.title ?? '');
+
+  const tvShowTmdbId =
+    data?.tmdbSeriesId ||
+    (tmdbQuery.data && tmdbQuery.data.length > 0
+      ? getBestTmdbSeriesId(tmdbQuery.data, data!.title)
+      : undefined);
+
+  const episodeImageRequests = episodesForSelectedSeason
+    .filter((episode) => tvShowTmdbId && episode.seasonNumber)
+    .map((episode) => ({
+      tmdbSeriesId: tvShowTmdbId!,
+      seasonNumber: episode.seasonNumber!,
+      episodeNumber: episode.episodeNumber,
+    }));
+
+  const episodeImageQueries =
+    useMultipleTmdbEpisodeImages(episodeImageRequests);
+
+  const episodesWithImages = episodesForSelectedSeason.map((episode) => {
+    const imageQueryIndex = episodeImageRequests.findIndex(
+      (req) =>
+        req.tmdbSeriesId === tvShowTmdbId &&
+        req.seasonNumber === episode.seasonNumber &&
+        req.episodeNumber === episode.episodeNumber,
+    );
+
+    const episodeImages =
+      imageQueryIndex >= 0
+        ? (episodeImageQueries[imageQueryIndex]?.data ?? [])
+        : [];
+
+    return {
+      ...episode,
+      episodeImageUrl: getBestTmdbEpisodeImageUrl(episodeImages),
+    };
+  });
 
   const isRelationsLoading = seasonsQuery.isLoading || episodesQuery.isLoading;
   const isRelationsError = seasonsQuery.isError || episodesQuery.isError;
@@ -100,53 +145,53 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
 
         {!isLoading && !isError && data ? (
           <>
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-              <div className="space-y-5">
-                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                  TV Show
-                </p>
-                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                  {data.title}
-                </h1>
-                <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
-                  <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                    Recommended age: {data.recommendedAge}+
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#2a2c31]">
+              {data.coverImageUrl && (
+                <AppImage
+                  src={data.coverImageUrl}
+                  alt={`${data.title} background`}
+                  fill
+                  sizes="100vw"
+                  className="absolute inset-0 w-full h-full object-cover scale-110 blur-sm"
+                />
+              )}
+              <div className="absolute inset-0 bg-black/60" />
+              <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] p-8 lg:p-12">
+                <div className="space-y-5">
+                  <p className="text-xs uppercase tracking-[0.28em] text-white/80">
+                    TV Show
+                  </p>
+                  <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                    {data.title}
+                  </h1>
+                  <div className="flex flex-wrap gap-2 text-sm text-white/90">
+                    <div className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1">
+                      Recommended age: {data.recommendedAge}+
+                    </div>
+                  </div>
+                  <p className="max-w-3xl text-base leading-8 text-white/80">
+                    {data.description}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center lg:justify-end">
+                  <div className="relative w-full max-w-64 aspect-2/3 overflow-hidden rounded-2xl border border-white/20 bg-[#2a2c31] shadow-2xl">
+                    {data.coverImageUrl ? (
+                      <AppImage
+                        src={data.coverImageUrl}
+                        alt={`${data.title} cover`}
+                        fill
+                        sizes="256px"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white/60 text-sm">
+                        No image available
+                      </div>
+                    )}
                   </div>
                 </div>
-                <p className="max-w-3xl text-base leading-8 text-[#d5d0c5]">
-                  {data.description}
-                </p>
               </div>
-
-              <Card className="overflow-hidden rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-                <div className="relative min-h-104 bg-[#2a2c31]">
-                  {data.coverImageUrl ? (
-                    <img
-                      src={data.coverImageUrl}
-                      alt={`${data.title} cover`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <>
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,44,49,0.18),rgba(15,23,42,0.94))]" />
-                      <div className="relative flex h-full min-h-104 flex-col justify-between p-6">
-                        <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                          TV show cover
-                        </div>
-                        <div className="space-y-3">
-                          <p className="text-xl font-medium text-white">
-                            {data.title}
-                          </p>
-                          <p className="max-w-sm text-sm leading-7 text-[#d5d0c5]">
-                            Reserved visual area for future cover artwork,
-                            posters or editorial imagery tied to this title.
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Card>
             </div>
 
             <div className="space-y-6">
@@ -176,7 +221,7 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
                       </p>
                     </div>
                   ) : seasons.length > 0 ? (
-                    <ButtonGroup className="flex-wrap gap-2 has-[>[data-slot=button-group]]:gap-2 [&>*]:rounded-full [&>*]:border-l">
+                    <ButtonGroup className="flex-wrap gap-2 has-[>[data-slot=button-group]]:gap-2 *:rounded-full *:border-l">
                       {seasons.map((season) => {
                         const isSelected = selectedSeason?.key === season.key;
 
@@ -216,7 +261,7 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
               seasons.length > 0 ? (
                 <div className="grid gap-6">
                   <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0">
-                    <CardHeader className="px-6 py-6">
+                    <CardHeader className="px-6 pt-6">
                       <CardTitle className="flex items-center gap-2 text-lg text-white">
                         <ListVideo className="size-5 text-muted-foreground" />
                         {selectedSeason
@@ -234,14 +279,14 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
                             Released in {selectedSeason.year}
                           </div>
                           <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                            {episodesForSelectedSeason.length} episodes
+                            {episodesWithImages.length} episodes
                           </div>
                         </div>
                       ) : null}
 
-                      {episodesForSelectedSeason.length > 0 ? (
+                      {episodesWithImages.length > 0 ? (
                         <div className="grid gap-5">
-                          {episodesForSelectedSeason.map((episode) => (
+                          {episodesWithImages.map((episode) => (
                             <TvShowEpisodeCard
                               key={episode.key}
                               episode={episode}

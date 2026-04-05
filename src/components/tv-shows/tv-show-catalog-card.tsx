@@ -2,6 +2,7 @@ import { Info, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import { AppImage } from '@/components/shared/app-image';
 import { Button } from '@/components/ui';
 import {
   Card,
@@ -50,13 +51,14 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
         className="cursor-pointer rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0 transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <CardHeader className="px-0">
-          <div className="relative h-44 border-b border-white/10 bg-[#2a2c31] overflow-hidden">
+          <div className="relative h-64 border-b border-white/10 bg-[#2a2c31] overflow-hidden">
             {tvShow.coverImageUrl ? (
-              <img
+              <AppImage
                 src={tvShow.coverImageUrl}
                 alt={`${tvShow.title} cover`}
+                fill
+                sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
                 className="w-full h-full object-cover"
-                loading="lazy"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
@@ -65,17 +67,14 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
             )}
           </div>
         </CardHeader>
-        <CardContent className="space-y-5 px-5 pb-0">
+        <CardContent className="space-y-4 px-3 pb-0">
           <div className="space-y-3">
-            <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              TV Show
-            </div>
-            <CardTitle className="text-xl font-semibold text-white">
+            <CardTitle className="text-base font-semibold text-white">
               {tvShow.title}
             </CardTitle>
           </div>
         </CardContent>
-        <CardFooter className="mt-auto grid gap-3 border-t border-white/10 px-5 py-4 sm:grid-cols-2">
+        <CardFooter className="mt-auto grid gap-3 border-t border-white/10 px-5 py-4">
           <Button
             variant="secondary"
             className="w-full"
@@ -85,7 +84,7 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
             }}
           >
             <Plus className="size-4" />
-            <span>Watchlist</span>
+            <span>Add</span>
           </Button>
           <Button
             variant="outline"

@@ -113,14 +113,14 @@ export function PublicTvShowsPage() {
           <div
             role="status"
             aria-label="Loading TV shows"
-            className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
+            className="grid gap-6 sm:grid-cols-2 xl:grid-cols-6"
           >
             {Array.from({ length: tvShowsPerPage }).map((_, index) => (
               <Card
                 key={index}
                 className="rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0"
               >
-                <Skeleton className="h-44 rounded-none rounded-t-3xl bg-[#2a2c31]" />
+                <Skeleton className="h-64 rounded-none rounded-t-3xl bg-[#2a2c31]" />
                 <CardContent className="space-y-4 px-5 py-5">
                   <Skeleton className="h-6 w-2/3 bg-[#31343a]" />
                   <Skeleton className="h-10 w-full bg-[#2a2c31]" />
@@ -223,7 +223,7 @@ export function PublicTvShowsPage() {
 
         {!isLoading && !isError && items.length > 0 ? (
           <div className="space-y-8">
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
               {items.map((tvShow) => (
                 <TvShowCatalogCard key={tvShow.key} tvShow={tvShow} />
               ))}

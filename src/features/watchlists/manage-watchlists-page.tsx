@@ -20,12 +20,14 @@ import {
 } from '@/components/ui';
 import { PageShell } from '@/layout/page-shell';
 import { InternalApiError } from '@/lib/api/internal-api-client';
+import { useTvShows } from '@/modules/tv-shows/hooks/use-tv-shows';
 import {
   useCreateWatchlist,
   useDeleteWatchlist,
   useUpdateWatchlist,
 } from '@/modules/watchlists/hooks/use-watchlist-mutations';
 import { useWatchlists } from '@/modules/watchlists/hooks/use-watchlists';
+import { getWatchlistTvShows } from '@/modules/watchlists/utils/watchlist-relations';
 import type {
   CreateWatchlistInput,
   SearchWatchlistsParams,
@@ -69,10 +71,22 @@ export function ManageWatchlistsPage() {
   const { data, isLoading, isError, error } = useWatchlists(
     watchlistsQueryParams,
   );
+  const tvShowsQuery = useTvShows({ limit: 100 });
   const createMutation = useCreateWatchlist();
   const updateMutation = useUpdateWatchlist();
   const deleteMutation = useDeleteWatchlist();
   const watchlists = data?.items ?? [];
+
+  const watchlistsWithImages = watchlists.map((watchlist) => {
+    const firstTvShow = getWatchlistTvShows(
+      watchlist,
+      tvShowsQuery.data?.items ?? [],
+    )[0];
+    return {
+      ...watchlist,
+      firstTvShowCoverImageUrl: firstTvShow?.coverImageUrl,
+    };
+  });
   const currentPage = previousBookmarks.length + 1;
   const hasPreviousPage = previousBookmarks.length > 0;
   const hasNextPage = Boolean(data?.bookmark);
@@ -314,7 +328,7 @@ export function ManageWatchlistsPage() {
           {!isLoading && !isError && watchlists.length > 0 ? (
             <div className="space-y-8">
               <WatchlistManagementTable
-                watchlists={watchlists}
+                watchlists={watchlistsWithImages}
                 onEdit={openEditModal}
                 onDelete={setWatchlistPendingDeletion}
               />

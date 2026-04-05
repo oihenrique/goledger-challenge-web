@@ -46,6 +46,7 @@ export interface WatchlistViewModel {
   updatedAt: string;
   lastTransaction: string;
   lastTransactionId: string;
+  firstTvShowCoverImageUrl?: string;
 }
 
 export interface SearchWatchlistsParams {

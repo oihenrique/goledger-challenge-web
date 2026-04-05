@@ -8,6 +8,7 @@ export interface RawTvShow extends RawAssetMeta {
   title: string;
   description: string;
   recommendedAge: number;
+  tmdbSeriesId?: number;
 }
 
 export interface RawTvShowHistoryEntry extends RawAssetHistoryMeta {
@@ -15,6 +16,7 @@ export interface RawTvShowHistoryEntry extends RawAssetHistoryMeta {
   title: string;
   description: string;
   recommendedAge: number;
+  tmdbSeriesId?: number;
 }
 
 export interface TvShowKey {
@@ -27,6 +29,7 @@ export interface CreateTvShowInput {
   title: string;
   description: string;
   recommendedAge: number;
+  tmdbSeriesId?: number;
 }
 
 export interface UpdateTvShowInput {
@@ -34,6 +37,7 @@ export interface UpdateTvShowInput {
   title: string;
   description: string;
   recommendedAge: number;
+  tmdbSeriesId?: number;
 }
 
 export interface TvShowViewModel {
@@ -45,6 +49,7 @@ export interface TvShowViewModel {
   lastTransaction: string;
   lastTransactionId: string;
   coverImageUrl?: string;
+  tmdbSeriesId?: number;
 }
 
 export interface SearchTvShowsParams {

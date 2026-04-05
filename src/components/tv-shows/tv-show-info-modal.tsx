@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ExternalLink, X } from 'lucide-react';
 
+import { AppImage } from '@/components/shared/app-image';
 import { Button, Dialog, DialogContent } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import type { TvShowViewModel } from '@/modules/tv-shows/types/tv-show.types';
@@ -49,9 +50,11 @@ export function TvShowInfoModal({ onClose, tvShow }: TvShowInfoModalProps) {
           <CardContent className="grid gap-6 px-6 py-6 lg:grid-cols-[0.7fr_1fr]">
             <div className="min-h-72 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#2a2c31]">
               {tvShow.coverImageUrl ? (
-                <img
+                <AppImage
                   src={tvShow.coverImageUrl}
                   alt={`${tvShow.title} cover`}
+                  fill
+                  sizes="(min-width: 1024px) 30vw, 100vw"
                   className="w-full h-full object-cover"
                 />
               ) : (

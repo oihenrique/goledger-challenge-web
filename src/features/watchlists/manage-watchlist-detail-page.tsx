@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { AppImage } from '@/components/shared/app-image';
 import { SearchInputGroup } from '@/components/shared/search-input-group';
 import { WatchlistDeleteDialog } from '@/components/watchlists/watchlist-delete-dialog';
 import { WatchlistDetailsModal } from '@/components/watchlists/watchlist-details-modal';
@@ -495,7 +496,17 @@ export function ManageWatchlistDetailPage({
                               >
                                 <div className="flex items-start gap-4">
                                   <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
-                                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
+                                    {tvShow.coverImageUrl ? (
+                                      <AppImage
+                                        src={tvShow.coverImageUrl}
+                                        alt={`${tvShow.title} cover`}
+                                        fill
+                                        sizes="80px"
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
+                                    )}
                                   </div>
                                   <div className="min-w-0 flex-1 space-y-3">
                                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

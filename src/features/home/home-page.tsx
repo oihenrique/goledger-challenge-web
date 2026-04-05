@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ArrowRight, BookmarkPlus, Clapperboard, Tv2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
+import { AppImage } from '@/components/shared/app-image';
 import {
   Button,
   Card,
@@ -21,6 +22,14 @@ import { useSeasons } from '@/modules/seasons/hooks/use-seasons';
 import { useTvShows } from '@/modules/tv-shows/hooks/use-tv-shows';
 import { useWatchlists } from '@/modules/watchlists/hooks/use-watchlists';
 import { getWatchlistTvShows } from '@/modules/watchlists/utils/watchlist-relations';
+import { TvShowPosterCard } from '@/components/tv-shows/tv-show-poster-card';
+import { EpisodeCard } from '@/components/episodes/episode-card';
+import {
+  useMultipleTmdbEpisodeImages,
+  getBestTmdbEpisodeImageUrl,
+  useMultipleTmdbTvShows,
+  getBestTmdbSeriesId,
+} from '@/modules/themoviedb';
 
 const homeBatchLimit = 100;
 
@@ -67,14 +76,14 @@ export function HomePage() {
       new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime(),
   );
   const featuredToday = tvShows.slice(0, 4);
-  const whatToWatch = tvShows.slice(0, 8);
+  const whatToWatch = tvShows.slice(0, 12);
 
   const seasonsByKey = new Map(
     (seasonsQuery.data?.items ?? []).map((season) => [season.key, season]),
   );
   const tvShowsByKey = new Map(tvShows.map((tvShow) => [tvShow.key, tvShow]));
 
-  const newEpisodes = [...(episodesQuery.data?.items ?? [])]
+  const rawNewEpisodes = [...(episodesQuery.data?.items ?? [])]
     .map((episode) => {
       const season = seasonsByKey.get(episode.seasonKey);
       const tvShow = season ? tvShowsByKey.get(season.tvShowKey) : undefined;
@@ -83,6 +92,8 @@ export function HomePage() {
         ...episode,
         seasonNumber: season?.number,
         tvShowTitle: tvShow?.title,
+        coverImageUrl: tvShow?.coverImageUrl,
+        tmdbSeriesId: tvShow?.tmdbSeriesId,
       };
     })
     .sort(
@@ -92,7 +103,61 @@ export function HomePage() {
     )
     .slice(0, 6);
 
-  const primaryWatchlist = watchlistsQuery.data?.items?.[0] ?? null;
+  const tvShowsWithoutId = rawNewEpisodes
+    .filter((episode) => episode.tvShowTitle && !episode.tmdbSeriesId)
+    .map((episode) => episode.tvShowTitle!)
+    .filter((title, index, arr) => arr.indexOf(title) === index);
+
+  const tmdbQueries = useMultipleTmdbTvShows(tvShowsWithoutId);
+
+  const titleToTmdbIdMap = new Map<string, number>();
+  tvShowsWithoutId.forEach((title, index) => {
+    const query = tmdbQueries[index];
+    if (query.data && query.data.length > 0) {
+      const seriesId = getBestTmdbSeriesId(query.data, title);
+      if (seriesId) {
+        titleToTmdbIdMap.set(title, seriesId);
+      }
+    }
+  });
+
+  const episodesWithTmdbIds = rawNewEpisodes.map((episode) => ({
+    ...episode,
+    tmdbSeriesId:
+      episode.tmdbSeriesId || titleToTmdbIdMap.get(episode.tvShowTitle || ''),
+  }));
+
+  const episodeImageRequests = episodesWithTmdbIds
+    .filter((episode) => episode.tmdbSeriesId && episode.seasonNumber)
+    .map((episode) => ({
+      tmdbSeriesId: episode.tmdbSeriesId!,
+      seasonNumber: episode.seasonNumber!,
+      episodeNumber: episode.episodeNumber,
+    }));
+
+  const episodeImageQueries =
+    useMultipleTmdbEpisodeImages(episodeImageRequests);
+
+  const newEpisodes = episodesWithTmdbIds.map((episode) => {
+    const imageQueryIndex = episodeImageRequests.findIndex(
+      (req) =>
+        req.tmdbSeriesId === episode.tmdbSeriesId &&
+        req.seasonNumber === episode.seasonNumber &&
+        req.episodeNumber === episode.episodeNumber,
+    );
+
+    const episodeImages =
+      imageQueryIndex >= 0
+        ? (episodeImageQueries[imageQueryIndex]?.data ?? [])
+        : [];
+
+    return {
+      ...episode,
+      episodeImageUrl: getBestTmdbEpisodeImageUrl(episodeImages),
+    };
+  });
+
+  const primaryWatchlist = watchlistsQuery.data?.items?.[2] ?? null;
   const watchlistTvShows = getWatchlistTvShows(
     primaryWatchlist,
     tvShowsQuery.data?.items ?? [],
@@ -116,7 +181,7 @@ export function HomePage() {
       }
 
       heroCarouselApi.scrollTo(0);
-    }, 3500);
+    }, 7000);
 
     return () => {
       window.clearInterval(autoplayInterval);
@@ -139,46 +204,71 @@ export function HomePage() {
               <CarouselContent>
                 {featuredToday.map((tvShow) => (
                   <CarouselItem key={tvShow.key}>
-                    <Card className="overflow-hidden rounded-[2rem] border border-white/10 bg-card py-0 shadow-none transition hover:border-white/20">
+                    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#25272c] transition hover:border-white/20">
+                      {tvShow.coverImageUrl && (
+                        <AppImage
+                          src={tvShow.coverImageUrl}
+                          alt={`${tvShow.title} background`}
+                          fill
+                          sizes="100vw"
+                          className="absolute inset-0 w-full h-full object-cover scale-110 blur-sm"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-black/60" />
                       <Link
                         href={`/tv-shows/${encodeURIComponent(tvShow.title)}`}
-                        className="block"
+                        className="block relative"
                       >
-                        <div className="relative min-h-105 border-b border-white/10 bg-[#25272c]">
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(90,138,230,0.28),transparent_42%),linear-gradient(180deg,rgba(17,24,39,0.08),rgba(15,23,42,0.94))]" />
-                          <div className="relative flex h-full min-h-105 flex-col justify-between px-6 py-6 sm:px-8 sm:py-8">
-                            <div className="inline-flex mb-2 w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                        <div className="flex h-full min-h-105 items-center gap-8 px-6 py-6 sm:px-8 sm:py-8">
+                          <div className="flex-1 space-y-4">
+                            <div className="inline-flex w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-white/90">
                               Featured today
                             </div>
 
-                            <div className="space-y-6">
-                              <div className="space-y-4">
-                                <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                                  {tvShow.title}
-                                </h1>
-                                <p className="line-clamp-4 max-w-2xl text-base leading-8 text-[#d5d0c5]">
-                                  {tvShow.description}
-                                </p>
-                              </div>
+                            <div className="space-y-4">
+                              <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                                {tvShow.title}
+                              </h1>
+                              <p className="line-clamp-3 max-w-2xl text-base leading-8 text-white/80">
+                                {tvShow.description}
+                              </p>
+                            </div>
 
-                              <div className="flex flex-wrap gap-3 text-sm text-[#d5d0c5]">
-                                <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">
-                                  Recommended age {tvShow.recommendedAge}+
-                                </span>
-                                <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">
-                                  Updated {formatDate(tvShow.updatedAt)}
-                                </span>
-                              </div>
+                            <div className="flex flex-wrap gap-3 text-sm text-white/90">
+                              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1">
+                                Recommended age {tvShow.recommendedAge}+
+                              </span>
+                              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1">
+                                Updated {formatDate(tvShow.updatedAt)}
+                              </span>
+                            </div>
 
-                              <div className="flex items-center gap-2 text-sm font-medium text-[#e7dcc4]">
-                                <span>Open series detail</span>
-                                <ArrowRight className="size-4" />
-                              </div>
+                            <div className="flex items-center gap-2 text-sm font-medium text-white">
+                              <span>Open details</span>
+                              <ArrowRight className="size-4" />
+                            </div>
+                          </div>
+
+                          <div className="shrink-0">
+                            <div className="relative w-40 aspect-2/3 overflow-hidden rounded-xl border border-white/20 bg-[#2a2c31] shadow-2xl">
+                              {tvShow.coverImageUrl ? (
+                                <AppImage
+                                  src={tvShow.coverImageUrl}
+                                  alt={`${tvShow.title} cover`}
+                                  fill
+                                  sizes="160px"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-white/60 text-xs">
+                                  No image
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
                       </Link>
-                    </Card>
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -203,38 +293,21 @@ export function HomePage() {
             href="/tv-shows"
           />
           {whatToWatch.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-6">
               {whatToWatch.map((tvShow) => (
-                <Link
+                <TvShowPosterCard
                   key={tvShow.key}
+                  tvShow={tvShow}
                   href={`/tv-shows/${encodeURIComponent(tvShow.title)}`}
-                  className="rounded-[1.7rem] border border-white/10 bg-card p-4 transition hover:border-white/20"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-[#25272c]">
-                      <Tv2 className="size-5 text-muted-foreground" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate text-lg font-semibold text-white">
-                        {tvShow.title}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Recommended age {tvShow.recommendedAge}+
-                      </p>
-                    </div>
-                  </div>
-                  <p className="mt-4 line-clamp-4 text-sm leading-7 text-[#d5d0c5]">
-                    {tvShow.description}
-                  </p>
-                </Link>
+                />
               ))}
             </div>
           ) : isLoading ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-6">
               {Array.from({ length: 8 }).map((_, index) => (
                 <Skeleton
                   key={index}
-                  className="h-56 rounded-[1.7rem] bg-[#25272c]"
+                  className="h-80 rounded-3xl bg-[#25272c]"
                 />
               ))}
             </div>
@@ -252,30 +325,13 @@ export function HomePage() {
             href="/manage/watchlists"
           />
           {primaryWatchlist && watchlistTvShows.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-6">
               {watchlistTvShows.map((tvShow) => (
-                <Link
+                <TvShowPosterCard
                   key={tvShow.key}
+                  tvShow={tvShow}
                   href={`/tv-shows/${encodeURIComponent(tvShow.title)}`}
-                  className="rounded-[1.7rem] border border-white/10 bg-card p-4 transition hover:border-white/20"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-[#25272c]">
-                      <BookmarkPlus className="size-5 text-muted-foreground" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate text-lg font-semibold text-white">
-                        {tvShow.title}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        In {primaryWatchlist.title}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="mt-4 line-clamp-3 text-sm leading-7 text-[#d5d0c5]">
-                    {tvShow.description}
-                  </p>
-                </Link>
+                />
               ))}
             </div>
           ) : (
@@ -301,44 +357,7 @@ export function HomePage() {
           {newEpisodes.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {newEpisodes.map((episode) => (
-                <Card
-                  key={episode.key}
-                  className="rounded-[1.7rem] border border-white/10 bg-card py-0 shadow-none"
-                >
-                  <CardContent className="space-y-4 px-5 py-5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-[#25272c]">
-                        <Clapperboard className="size-5 text-muted-foreground" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="truncate text-lg font-semibold text-white">
-                          {episode.title}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {episode.tvShowTitle || 'Unknown TV show'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
-                      <span className="rounded-full border border-white/10 bg-[#25272c] px-3 py-1">
-                        Episode {episode.episodeNumber}
-                      </span>
-                      {episode.seasonNumber ? (
-                        <span className="rounded-full border border-white/10 bg-[#25272c] px-3 py-1">
-                          Season {episode.seasonNumber}
-                        </span>
-                      ) : null}
-                      <span className="rounded-full border border-white/10 bg-[#25272c] px-3 py-1">
-                        {formatDate(episode.releaseDate)}
-                      </span>
-                    </div>
-
-                    <p className="line-clamp-4 text-sm leading-7 text-[#d5d0c5]">
-                      {episode.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <EpisodeCard key={episode.key} episode={episode} />
               ))}
             </div>
           ) : isLoading ? (

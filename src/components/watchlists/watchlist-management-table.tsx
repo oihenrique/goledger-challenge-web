@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { MoreHorizontal, PencilLine, Trash2 } from 'lucide-react';
 
+import { AppImage } from '@/components/shared/app-image';
 import { Button } from '@/components/ui';
 import {
   DropdownMenu,
@@ -61,12 +62,24 @@ export function WatchlistManagementTable({
           >
             <div className="flex items-center gap-4 px-4 py-4 sm:px-5">
               <div className="relative h-18 w-18 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
-                <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(68,114,196,0.24),rgba(15,23,42,0.94))]" />
-                <div className="relative flex h-full items-end p-2">
-                  <span className="line-clamp-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80">
-                    {watchlist.title}
-                  </span>
-                </div>
+                {watchlist.firstTvShowCoverImageUrl ? (
+                  <AppImage
+                    src={watchlist.firstTvShowCoverImageUrl}
+                    alt={`${watchlist.title} cover`}
+                    fill
+                    sizes="72px"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(68,114,196,0.24),rgba(15,23,42,0.94))]" />
+                    <div className="relative flex h-full items-end p-2">
+                      <span className="line-clamp-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80">
+                        {watchlist.title}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="min-w-0 flex-1">
