@@ -157,7 +157,7 @@ export function HomePage() {
     };
   });
 
-  const primaryWatchlist = watchlistsQuery.data?.items?.[2] ?? null;
+  const primaryWatchlist = watchlistsQuery.data?.items?.[0] ?? null;
   const watchlistTvShows = getWatchlistTvShows(
     primaryWatchlist,
     tvShowsQuery.data?.items ?? [],
