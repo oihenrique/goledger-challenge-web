@@ -5,11 +5,7 @@ const productLinks = [
   { href: '/tv-shows', label: 'Series Catalog' },
 ];
 
-const institutionalLinks = [
-  { href: '#', label: 'Privacy' },
-  { href: '#', label: 'Cookies' },
-  { href: '#', label: 'Terms' },
-];
+const projectLinks = [{ href: '/about', label: 'About' }];
 
 const socialLinks = [
   {
@@ -57,7 +53,7 @@ export function SiteFooter() {
             Project
           </p>
           <div className="mt-4 space-y-3">
-            {institutionalLinks.map((item) => (
+            {projectLinks.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
