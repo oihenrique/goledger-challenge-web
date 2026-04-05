@@ -41,6 +41,11 @@ export function TvShowEpisodeCard({ episode }: TvShowEpisodeCardProps) {
               <span className="inline-flex rounded-full border border-white/10 bg-[#25272c] px-2 py-1 text-[#d5d0c5]">
                 {episodeCode}
               </span>
+              {typeof episode.rating === 'number' && episode.rating > 9 ? (
+                <span className="inline-flex rounded-full border border-[#c59a52]/40 bg-[#c59a52] px-2 py-1 font-medium text-black">
+                  Top rated
+                </span>
+              ) : null}
               {typeof episode.rating === 'number' ? (
                 <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-[#25272c] px-2 py-1 text-[#d5d0c5]">
                   <Star className="size-3 text-[#c59a52]" />
