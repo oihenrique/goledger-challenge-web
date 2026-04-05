@@ -11,7 +11,7 @@ export function ProfileMenu() {
     <details className="group relative">
       <summary className="flex cursor-pointer list-none items-center gap-3 rounded-full border border-white/10 bg-[#26282d] px-3 py-2 text-sm text-[#ebe5d8] transition hover:border-white/20 hover:bg-[#2d3035]">
         <CircleUserRound className="size-5 text-[#c59a52]" />
-        <span className="hidden sm:inline">Henrique</span>
+        <span className="hidden sm:inline">Username</span>
         <ChevronDown className="size-4 transition group-open:rotate-180" />
       </summary>
       <div className="absolute right-0 top-[calc(100%+0.75rem)] z-20 w-72 rounded-2xl border border-white/10 bg-[#1d1f23] p-3 shadow-2xl shadow-black/40">

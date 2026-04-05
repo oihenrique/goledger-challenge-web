@@ -149,6 +149,8 @@ export function TvShowFormModal({
                       id="tv-show-title"
                       aria-invalid={Boolean(errors.title)}
                       placeholder="Enter the series title"
+                      readOnly={mode === 'edit'}
+                      disabled={mode === 'edit'}
                       className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
                       {...register('title')}
                     />

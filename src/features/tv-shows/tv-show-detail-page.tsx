@@ -49,7 +49,11 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
   const [selectedSeasonKey, setSelectedSeasonKey] = useState<string | null>(
     null,
   );
-  const seasonsQuery = useSeasons({ limit: relationBatchLimit });
+  const seasonsQuery = useSeasons(
+    { limit: relationBatchLimit, tvShowKey: data?.key },
+    { enabled: Boolean(data?.key) },
+  );
+  const coverImageUrl = data?.coverImageUrl;
 
   const seasons = getOrderedTvShowSeasons(
     seasonsQuery.data?.items ?? [],
@@ -57,9 +61,12 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
   );
   const selectedSeason = resolveActiveSeason(seasons, selectedSeasonKey);
   const activeSeasonKey = selectedSeason?.key ?? null;
-  const episodesQuery = useEpisodes({
-    seasonKey: activeSeasonKey ?? undefined,
-  });
+  const episodesQuery = useEpisodes(
+    {
+      seasonKey: activeSeasonKey ?? undefined,
+    },
+    { enabled: Boolean(activeSeasonKey) },
+  );
   const episodesForSelectedSeason = mapEpisodesToRelationViewModels(
     episodesQuery.data?.items ?? [],
     selectedSeason,
@@ -147,16 +154,16 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
 
         {!isLoading && !isError && data ? (
           <>
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#2a2c31]">
-              {data.coverImageUrl && (
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-[#1d1f25] via-[#1d1f25] to-[#22252c]">
+              {coverImageUrl ? (
                 <AppImage
-                  src={data.coverImageUrl}
+                  src={coverImageUrl}
                   alt={`${data.title} background`}
                   fill
                   sizes="100vw"
-                  className="absolute inset-0 w-full h-full object-cover scale-110 blur-sm"
+                  className="absolute inset-0 h-full w-full scale-105 object-cover blur-sm"
                 />
-              )}
+              ) : null}
               <div className="absolute inset-0 bg-black/60" />
               <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] p-8 lg:p-12">
                 <div className="space-y-5">
@@ -188,9 +195,9 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
 
                 <div className="flex items-center justify-center lg:justify-end">
                   <div className="relative w-full max-w-64 aspect-2/3 overflow-hidden rounded-2xl border border-white/20 bg-[#2a2c31] shadow-2xl">
-                    {data.coverImageUrl ? (
+                    {coverImageUrl ? (
                       <AppImage
-                        src={data.coverImageUrl}
+                        src={coverImageUrl}
                         alt={`${data.title} cover`}
                         fill
                         sizes="256px"

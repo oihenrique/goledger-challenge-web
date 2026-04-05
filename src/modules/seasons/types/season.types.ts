@@ -56,6 +56,7 @@ export interface SeasonRelationViewModel extends SeasonViewModel {
 export interface SearchSeasonsParams {
   bookmark?: string;
   limit?: number;
+  tvShowKey?: string;
   searchTerm?: string;
 }
 

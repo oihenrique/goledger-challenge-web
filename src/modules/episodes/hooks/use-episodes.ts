@@ -4,9 +4,13 @@ import { episodeQueryKeys } from '@/modules/episodes/constants/episode.query-key
 import { searchPaginatedEpisodes } from '@/modules/episodes/services/episode.service';
 import type { SearchEpisodesParams } from '@/modules/episodes/types/episode.types';
 
-export function useEpisodes(params: SearchEpisodesParams) {
+export function useEpisodes(
+  params: SearchEpisodesParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: episodeQueryKeys.list(params),
     queryFn: ({ signal }) => searchPaginatedEpisodes(params, signal),
+    enabled: options?.enabled ?? true,
   });
 }

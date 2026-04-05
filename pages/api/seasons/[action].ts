@@ -11,4 +11,22 @@ export default createDomainApiHandler({
   createSchema: createSeasonSchema,
   updateSchema: updateSeasonSchema,
   keySchema: seasonKeySchema,
+  buildSearchSelector: (body) => {
+    const tvShowKey =
+      typeof body.tvShowKey === 'string' && body.tvShowKey.trim()
+        ? body.tvShowKey
+        : undefined;
+
+    return {
+      '@assetType': assetTypes.seasons,
+      ...(tvShowKey
+        ? {
+            tvShow: {
+              '@assetType': assetTypes.tvShows,
+              '@key': tvShowKey,
+            },
+          }
+        : {}),
+    };
+  },
 });

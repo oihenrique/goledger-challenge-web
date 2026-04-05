@@ -55,6 +55,7 @@ export async function searchPaginatedSeasons(
       body: {
         limit: params.limit,
         bookmark: params.bookmark,
+        tvShowKey: params.tvShowKey,
         searchTerm: params.searchTerm,
       },
       signal,

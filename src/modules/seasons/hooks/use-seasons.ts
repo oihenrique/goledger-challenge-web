@@ -4,9 +4,13 @@ import { seasonQueryKeys } from '@/modules/seasons/constants/season.query-keys';
 import { searchPaginatedSeasons } from '@/modules/seasons/services/season.service';
 import type { SearchSeasonsParams } from '@/modules/seasons/types/season.types';
 
-export function useSeasons(params: SearchSeasonsParams) {
+export function useSeasons(
+  params: SearchSeasonsParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: seasonQueryKeys.list(params),
     queryFn: ({ signal }) => searchPaginatedSeasons(params, signal),
+    enabled: options?.enabled ?? true,
   });
 }
