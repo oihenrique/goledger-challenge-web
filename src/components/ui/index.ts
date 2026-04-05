@@ -13,3 +13,4 @@ export * from './pagination';
 export * from './separator';
 export * from './skeleton';
 export * from './sonner';
+export * from './tabs';

@@ -1,7 +1,19 @@
 import { Layers2 } from 'lucide-react';
 
+import { AssetHistoryPanel } from '@/components/shared/asset-history-panel';
 import { BlockchainRecordPanel } from '@/components/shared/blockchain-record-panel';
-import { Card, CardContent, CardHeader, CardTitle, Dialog, DialogContent } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Dialog,
+  DialogContent,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui';
 import type { SeasonViewModel } from '@/modules/seasons/types/season.types';
 
 interface SeasonDetailsModalProps {
@@ -32,33 +44,62 @@ export function SeasonDetailsModal({
               </CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="grid gap-6 px-6 py-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="space-y-5">
-              <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
-                <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                  Release year: {season.year}
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
-                  <Layers2 className="size-4 text-muted-foreground" />
-                  Linked to {tvShowTitle}
-                </div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  TV show
-                </p>
-                <p className="mt-2 text-sm text-[#ebe5d8]">{tvShowTitle}</p>
-              </div>
-            </div>
+          <CardContent className="px-6 py-6">
+            <Tabs defaultValue="overview" className="gap-5">
+              <TabsList
+                variant="line"
+                className="w-full justify-start border-b border-white/10 px-0"
+              >
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="history">History</TabsTrigger>
+              </TabsList>
 
-            <div className="space-y-4">
-              <BlockchainRecordPanel
-                assetKey={season.key}
-                lastTransaction={season.lastTransaction}
-                lastTransactionId={season.lastTransactionId}
-                updatedAt={season.updatedAt}
-              />
-            </div>
+              <TabsContent value="overview">
+                <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+                  <div className="space-y-5">
+                    <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
+                      <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
+                        Release year: {season.year}
+                      </div>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
+                        <Layers2 className="size-4 text-muted-foreground" />
+                        Linked to {tvShowTitle}
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        TV show
+                      </p>
+                      <p className="mt-2 text-sm text-[#ebe5d8]">{tvShowTitle}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <BlockchainRecordPanel
+                      assetKey={season.key}
+                      lastTransaction={season.lastTransaction}
+                      lastTransactionId={season.lastTransactionId}
+                      updatedAt={season.updatedAt}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="history">
+                <AssetHistoryPanel
+                  assetBasePath="/api/seasons"
+                  assetLabel="Season"
+                  historyKey={{
+                    '@assetType': 'seasons',
+                    number: season.number,
+                    tvShow: {
+                      '@assetType': 'tvShows',
+                      '@key': season.tvShowKey,
+                    },
+                  }}
+                />
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </DialogContent>
