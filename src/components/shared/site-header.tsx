@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { BookmarkPlus, Tv } from 'lucide-react';
 
@@ -8,11 +9,17 @@ export function SiteHeader() {
   return (
     <header className="border-b border-white/10 bg-[#191a1d]">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
-        <Link
-          href="/"
-          className="text-lg font-semibold tracking-tight text-white"
-        >
-          GoStream
+        <Link href="/" className="flex items-center gap-3">
+          <div className="relative h-10 w-32">
+            <Image
+              src="/logo.png"
+              alt="GoStream logo"
+              fill
+              sizes="128px"
+              className="object-contain"
+              priority
+            />
+          </div>
         </Link>
         <div className="flex items-center gap-3 sm:gap-5">
           <Button variant="outline" size="sm" asChild>
