@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { ChevronLeft, Layers2, ListVideo } from 'lucide-react';
+import { ChevronLeft, Layers2, ListVideo, Plus } from 'lucide-react';
 
 import { AppImage } from '@/components/shared/app-image';
 import { TvShowEpisodeCard } from '@/components/tv-shows/tv-show-episode-card';
+import { TvShowWatchlistModal } from '@/components/tv-shows/tv-show-watchlist-modal';
 import { TvShowRelationsSkeleton } from '@/components/tv-shows/tv-show-relations-skeleton';
 import { Button } from '@/components/ui';
 import { ButtonGroup } from '@/components/ui';
@@ -44,6 +45,7 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
     '@assetType': assetTypes.tvShows,
     title,
   });
+  const [isWatchlistModalOpen, setIsWatchlistModalOpen] = useState(false);
   const [selectedSeasonKey, setSelectedSeasonKey] = useState<string | null>(
     null,
   );
@@ -172,6 +174,16 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
                   <p className="max-w-3xl text-base leading-8 text-white/80">
                     {data.description}
                   </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => setIsWatchlistModalOpen(true)}
+                    >
+                      <Plus className="size-4" />
+                      <span>Add to watchlist</span>
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-center lg:justify-end">
@@ -317,6 +329,12 @@ export function TvShowDetailPage({ title }: TvShowDetailPageProps) {
           </>
         ) : null}
       </section>
+      {data && isWatchlistModalOpen ? (
+        <TvShowWatchlistModal
+          tvShow={data}
+          onClose={() => setIsWatchlistModalOpen(false)}
+        />
+      ) : null}
     </PageShell>
   );
 }

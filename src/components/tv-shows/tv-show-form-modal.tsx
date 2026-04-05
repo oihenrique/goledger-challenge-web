@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoaderCircle, X } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogContent,
   Field,
@@ -33,6 +34,7 @@ interface TvShowFormModalProps {
   isPending?: boolean;
   mode: 'create' | 'edit';
   onClose: () => void;
+  onCreateSuccessNavigate?: (title: string) => void;
   onSubmit: (input: CreateTvShowInput | UpdateTvShowInput) => Promise<void>;
   tvShow?: TvShowViewModel | null;
 }
@@ -62,9 +64,11 @@ export function TvShowFormModal({
   isPending = false,
   mode,
   onClose,
+  onCreateSuccessNavigate,
   onSubmit,
   tvShow,
 }: TvShowFormModalProps) {
+  const [openAfterCreate, setOpenAfterCreate] = useState(true);
   const {
     formState: { errors },
     handleSubmit,
@@ -88,6 +92,10 @@ export function TvShowFormModal({
     };
 
     await onSubmit(payload);
+
+    if (mode === 'create' && openAfterCreate) {
+      onCreateSuccessNavigate?.(payload.title);
+    }
   }
 
   const heading =
@@ -201,18 +209,46 @@ export function TvShowFormModal({
                 </FieldContent>
               </Field>
 
-              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
-                <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isPending}>
-                  {isPending ? (
-                    <LoaderCircle className="size-4 animate-spin" />
-                  ) : null}
-                  <span>
-                    {mode === 'create' ? 'Create TV show' : 'Save changes'}
-                  </span>
-                </Button>
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+                {mode === 'create' ? (
+                  <Field
+                    orientation="horizontal"
+                    className="items-center gap-2"
+                  >
+                    <Checkbox
+                      id="tv-show-open-manage-page"
+                      checked={openAfterCreate}
+                      onCheckedChange={(checked) =>
+                        setOpenAfterCreate(checked === true)
+                      }
+                      className="border-white/20 bg-[#2a2c31] data-checked:border-[#b58d47] data-checked:bg-[#b58d47] data-checked:text-black"
+                    />
+                    <FieldContent>
+                      <FieldLabel
+                        htmlFor="tv-show-open-manage-page"
+                        className="text-sm text-[#d5d0c5]"
+                      >
+                        Open manage page after create
+                      </FieldLabel>
+                    </FieldContent>
+                  </Field>
+                ) : (
+                  <div />
+                )}
+
+                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                  <Button type="button" variant="outline" onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={isPending}>
+                    {isPending ? (
+                      <LoaderCircle className="size-4 animate-spin" />
+                    ) : null}
+                    <span>
+                      {mode === 'create' ? 'Create TV show' : 'Save changes'}
+                    </span>
+                  </Button>
+                </div>
               </div>
             </form>
           </CardContent>

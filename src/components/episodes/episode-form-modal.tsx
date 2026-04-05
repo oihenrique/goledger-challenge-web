@@ -10,6 +10,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Checkbox,
   Dialog,
   DialogContent,
   Field,
@@ -295,14 +296,13 @@ export function EpisodeFormModal({
                     orientation="horizontal"
                     className="items-center gap-2"
                   >
-                    <input
+                    <Checkbox
                       id="episode-create-another"
-                      type="checkbox"
                       checked={createAnother}
-                      onChange={(event) =>
-                        setCreateAnother(event.target.checked)
+                      onCheckedChange={(checked) =>
+                        setCreateAnother(checked === true)
                       }
-                      className="size-4 rounded border border-white/20 bg-[#2a2c31] accent-[#b58d47]"
+                      className="border-white/20 bg-[#2a2c31] data-checked:border-[#b58d47] data-checked:bg-[#b58d47] data-checked:text-black"
                     />
                     <FieldContent>
                       <FieldLabel

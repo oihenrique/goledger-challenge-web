@@ -10,6 +10,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Checkbox,
   Dialog,
   DialogContent,
   Field,
@@ -196,12 +197,13 @@ export function SeasonFormModal({
               <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 {mode === 'create' ? (
                   <Field orientation="horizontal" className="items-center gap-2">
-                    <input
+                    <Checkbox
                       id="season-create-another"
-                      type="checkbox"
                       checked={createAnother}
-                      onChange={(event) => setCreateAnother(event.target.checked)}
-                      className="size-4 rounded border border-white/20 bg-[#2a2c31] accent-[#b58d47]"
+                      onCheckedChange={(checked) =>
+                        setCreateAnother(checked === true)
+                      }
+                      className="border-white/20 bg-[#2a2c31] data-checked:border-[#b58d47] data-checked:bg-[#b58d47] data-checked:text-black"
                     />
                     <FieldContent>
                       <FieldLabel

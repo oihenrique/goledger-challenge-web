@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { toast } from 'sonner';
 
 import { SearchInputGroup } from '@/components/shared/search-input-group';
@@ -43,6 +44,7 @@ function getMutationErrorMessage(error: unknown, fallback: string) {
 }
 
 export function ManageTvShowsPage() {
+  const router = useRouter();
   const [searchInput, setSearchInput] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [currentBookmark, setCurrentBookmark] = useState<string | undefined>();
@@ -85,6 +87,11 @@ export function ManageTvShowsPage() {
   function closeFormModal() {
     setFormMode(null);
     setSelectedTvShow(null);
+  }
+
+  function handleCreateSuccessNavigate(title: string) {
+    closeFormModal();
+    void router.push(`/manage/tv-shows/${encodeURIComponent(title)}`);
   }
 
   function openDeleteDialog(tvShow: TvShowViewModel) {
@@ -369,6 +376,7 @@ export function ManageTvShowsPage() {
           mode={formMode}
           tvShow={selectedTvShow}
           isPending={isFormPending}
+          onCreateSuccessNavigate={handleCreateSuccessNavigate}
           onClose={closeFormModal}
           onSubmit={handleFormSubmit}
         />
