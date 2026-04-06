@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   BookmarkPlus,
@@ -70,6 +70,7 @@ export function ManageWatchlistDetailPage({
   title,
 }: ManageWatchlistDetailPageProps) {
   const router = useRouter();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchInput, setSearchInput] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [selectedSearchResultKey, setSelectedSearchResultKey] = useState<
@@ -168,8 +169,11 @@ export function ManageWatchlistDetailPage({
         new Set([...watchlist.tvShowKeys, selectedSearchResultKey]),
       );
       await updateWatchlistTvShows(nextKeys);
+      setSearchInput('');
+      setSubmittedSearchTerm('');
       setSelectedSearchResultKey(null);
       setCurrentItemsPage(1);
+      searchInputRef.current?.focus();
       toast.success('Added the selected TV show to this watchlist.');
     } catch (mutationError) {
       toast.error(
@@ -365,6 +369,7 @@ export function ManageWatchlistDetailPage({
                       <div className="flex-1">
                         <SearchInputGroup
                           id="watchlist-tv-show-search"
+                          inputRef={searchInputRef}
                           label="Search title to add"
                           value={searchInput}
                           placeholder="Search title to add"
@@ -399,7 +404,7 @@ export function ManageWatchlistDetailPage({
                           className="h-56 rounded-2xl border border-white/10 bg-[#2a2c31]"
                         />
                       ) : selectableResults.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="max-h-96 space-y-3 overflow-y-auto pr-1">
                           {selectableResults.map((tvShow) => {
                             const isSelected =
                               selectedSearchResultKey === tvShow.key;
@@ -418,7 +423,17 @@ export function ManageWatchlistDetailPage({
                                 onClick={() => toggleSelectedTvShow(tvShow.key)}
                               >
                                 <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
-                                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
+                                  {tvShow.coverImageUrl ? (
+                                    <AppImage
+                                      src={tvShow.coverImageUrl}
+                                      alt={`${tvShow.title} poster`}
+                                      fill
+                                      sizes="56px"
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
+                                  )}
                                 </div>
                                 <div className="min-w-0 flex-1 space-y-2">
                                   <div className="flex items-center justify-between gap-3">

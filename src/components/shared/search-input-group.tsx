@@ -1,4 +1,5 @@
 import { Search, X } from 'lucide-react';
+import type { Ref } from 'react';
 
 import { Button } from '@/components/ui';
 import { ButtonGroup } from '@/components/ui';
@@ -7,6 +8,7 @@ import { Input } from '@/components/ui';
 
 interface SearchInputGroupProps {
   id: string;
+  inputRef?: Ref<HTMLInputElement>;
   label?: string;
   onChange: (value: string) => void;
   onClear: () => void;
@@ -18,6 +20,7 @@ interface SearchInputGroupProps {
 
 export function SearchInputGroup({
   id,
+  inputRef,
   label = 'Search',
   onChange,
   onClear,
@@ -36,6 +39,7 @@ export function SearchInputGroup({
               <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 id={id}
+                ref={inputRef}
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 placeholder={placeholder}
