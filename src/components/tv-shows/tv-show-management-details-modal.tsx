@@ -58,7 +58,7 @@ export function TvShowManagementDetailsModal({
                       <h3 className="text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground">
                         Editorial snapshot
                       </h3>
-                      <p className="text-base leading-8 text-[#d5d0c5]">
+                      <p className="max-h-48 overflow-y-auto pr-2 text-base leading-8 text-[#d5d0c5]">
                         {tvShow.description}
                       </p>
                     </div>

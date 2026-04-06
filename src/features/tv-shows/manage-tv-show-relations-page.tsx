@@ -88,7 +88,13 @@ export function ManageTvShowRelationsPage({
     '@assetType': assetTypes.tvShows,
     title,
   });
-  const seasonsQuery = useSeasons({ limit: relationBatchLimit });
+  const seasonsQuery = useSeasons(
+    {
+      limit: relationBatchLimit,
+      tvShowKey: tvShowQuery.data?.key,
+    },
+    { enabled: Boolean(tvShowQuery.data?.key) },
+  );
   const createSeasonMutation = useCreateSeason();
   const updateSeasonMutation = useUpdateSeason();
   const deleteSeasonMutation = useDeleteSeason();
@@ -129,9 +135,12 @@ export function ManageTvShowRelationsPage({
   const selectedSeason = resolveActiveSeason(seasons, selectedSeasonKey);
   const activeSeasonKey = selectedSeason?.key ?? null;
 
-  const episodesQuery = useEpisodes({
-    seasonKey: activeSeasonKey ?? undefined,
-  });
+  const episodesQuery = useEpisodes(
+    {
+      seasonKey: activeSeasonKey ?? undefined,
+    },
+    { enabled: Boolean(activeSeasonKey) },
+  );
   const allEpisodes = mapEpisodesToRelationViewModels(
     episodesQuery.data?.items ?? [],
     selectedSeason,
