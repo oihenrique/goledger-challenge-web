@@ -94,15 +94,18 @@ export function ManageWatchlistDetailPage({
     watchlist,
     allTvShowsQuery.data?.items ?? [],
   );
+
   const totalItemsPages = Math.max(
     1,
     Math.ceil(linkedTvShows.length / watchlistItemsPerPage),
   );
   const safeCurrentItemsPage = Math.min(currentItemsPage, totalItemsPages);
+
   const paginatedLinkedTvShows = linkedTvShows.slice(
     (safeCurrentItemsPage - 1) * watchlistItemsPerPage,
     safeCurrentItemsPage * watchlistItemsPerPage,
   );
+
   const hasPreviousItemsPage = safeCurrentItemsPage > 1;
   const hasNextItemsPage = safeCurrentItemsPage < totalItemsPages;
 
@@ -193,9 +196,11 @@ export function ManageWatchlistDetailPage({
     try {
       const nextKeys = watchlist.tvShowKeys.filter((key) => key !== tvShow.key);
       await updateWatchlistTvShows(nextKeys);
+
       if (safeCurrentItemsPage > 1 && paginatedLinkedTvShows.length === 1) {
         setCurrentItemsPage((page) => Math.max(1, page - 1));
       }
+
       toast.success(`Removed ${tvShow.title} from this watchlist.`);
     } catch (mutationError) {
       toast.error(
@@ -217,6 +222,7 @@ export function ManageWatchlistDetailPage({
         ...input,
         tvShows: buildWatchlistTvShowReferences(watchlist.tvShowKeys),
       });
+
       setIsEditModalOpen(false);
       toast.success(`Updated ${updatedWatchlist.title}.`);
 
@@ -277,12 +283,17 @@ export function ManageWatchlistDetailPage({
     <>
       <PageShell>
         <section
-          className="space-y-8 py-14 sm:py-16"
+          className="space-y-6 py-6 sm:space-y-8 sm:py-16"
           aria-busy={watchlistQuery.isLoading}
           aria-live="polite"
         >
           <div className="flex flex-wrap items-center gap-3">
-            <Button variant="outline" size="sm" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="w-full sm:w-auto"
+            >
               <Link href="/manage/watchlists">
                 <ChevronLeft className="size-4" />
                 <span>Back to watchlists</span>
@@ -294,17 +305,17 @@ export function ManageWatchlistDetailPage({
             <div
               role="status"
               aria-label="Loading watchlist"
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
-              <div className="h-16 w-1/2 rounded-3xl border border-white/10 bg-card" />
-              <div className="h-120 rounded-3xl border border-white/10 bg-card" />
+              <div className="h-10 w-40 rounded-[1.25rem] border border-white/10 bg-card sm:h-16 sm:w-1/2 sm:rounded-3xl" />
+              <div className="h-72 rounded-[1.25rem] border border-white/10 bg-card sm:h-[30rem] sm:rounded-3xl" />
             </div>
           ) : null}
 
           {watchlistQuery.isError ? (
             <div
               role="alert"
-              className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6"
+              className="rounded-[1.25rem] border border-rose-500/30 bg-rose-950/20 p-4 sm:rounded-3xl sm:p-6"
             >
               <p className="text-sm font-medium text-rose-200">
                 Unable to load this watchlist.
@@ -319,31 +330,35 @@ export function ManageWatchlistDetailPage({
 
           {!watchlistQuery.isLoading && !watchlistQuery.isError && watchlist ? (
             <>
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div className="space-y-4">
-                  <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="space-y-3 sm:space-y-4">
+                  <h1 className="max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-5xl">
                     {watchlist.title}
                   </h1>
-                  <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
+                  <p className="max-w-2xl text-sm leading-6 text-[#d5d0c5] sm:text-base sm:leading-8">
                     {watchlist.description ||
                       'This watchlist does not have a description yet.'}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-3">
+
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
                   <Button
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => setIsDetailsModalOpen(true)}
                   >
                     Technical details
                   </Button>
                   <Button
                     variant="outline"
+                    className="w-full sm:w-auto"
                     onClick={() => setIsEditModalOpen(true)}
                   >
                     Edit watchlist
                   </Button>
                   <Button
                     variant="destructive"
+                    className="w-full sm:w-auto"
                     onClick={() => setIsDeleteDialogOpen(true)}
                   >
                     Delete watchlist
@@ -351,21 +366,22 @@ export function ManageWatchlistDetailPage({
                 </div>
               </div>
 
-              <div className="grid gap-6">
-                <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                  <CardHeader className="border-b border-white/10 px-6 py-5">
+              <div className="grid gap-5 sm:gap-6">
+                <Card className="rounded-[1.25rem] border border-white/10 bg-card pt-2 pb-4 shadow-none sm:rounded-3xl">
+                  <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
                     <div className="space-y-2">
-                      <CardTitle className="text-xl font-semibold text-white">
+                      <CardTitle className="text-lg font-semibold text-white sm:text-xl">
                         Add a title to this list
                       </CardTitle>
-                      <p className="text-sm leading-7 text-[#d5d0c5]">
-                        Search for catalog titles, select one or more results,
-                        then confirm the additions.
+                      <p className="text-sm leading-6 text-[#d5d0c5] sm:leading-7">
+                        Search for catalog titles, select one result, then
+                        confirm the addition.
                       </p>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-5 px-6 pb-6">
-                    <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-end">
+
+                  <CardContent className="space-y-4 px-4 pb-4 sm:space-y-5 sm:px-6 sm:pb-6">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                       <div className="flex-1">
                         <SearchInputGroup
                           id="watchlist-tv-show-search"
@@ -378,9 +394,11 @@ export function ManageWatchlistDetailPage({
                           onSubmit={handleSearchSubmit}
                         />
                       </div>
+
                       <div className="sm:pb-1">
                         <Button
                           type="button"
+                          className="w-full sm:w-auto"
                           disabled={
                             !selectedSearchResultKey || updateMutation.isPending
                           }
@@ -401,10 +419,10 @@ export function ManageWatchlistDetailPage({
                         <div
                           role="status"
                           aria-label="Searching TV shows"
-                          className="h-56 rounded-2xl border border-white/10 bg-[#2a2c31]"
+                          className="h-40 rounded-[1rem] border border-white/10 bg-[#2a2c31] sm:h-56 sm:rounded-2xl"
                         />
                       ) : selectableResults.length > 0 ? (
-                        <div className="max-h-96 space-y-3 overflow-y-auto pr-1">
+                        <div className="max-h-[40dvh] space-y-2 overflow-y-auto pr-1 sm:max-h-96 sm:space-y-3">
                           {selectableResults.map((tvShow) => {
                             const isSelected =
                               selectedSearchResultKey === tvShow.key;
@@ -415,7 +433,7 @@ export function ManageWatchlistDetailPage({
                                 key={tvShow.key}
                                 aria-pressed={isSelected}
                                 aria-label={`Select ${tvShow.title} to add to ${watchlist.title}`}
-                                className={`flex w-full cursor-pointer items-start gap-3 rounded-2xl border px-4 py-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                                className={`flex w-full cursor-pointer items-start gap-3 rounded-[1rem] border px-3 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:rounded-2xl sm:px-4 sm:py-4 ${
                                   isSelected
                                     ? 'border-[#7c6135] bg-[#2a2c31]'
                                     : 'border-white/10 bg-[#1c1d21] hover:bg-[#23252a]'
@@ -435,17 +453,19 @@ export function ManageWatchlistDetailPage({
                                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
                                   )}
                                 </div>
+
                                 <div className="min-w-0 flex-1 space-y-2">
                                   <div className="flex items-center justify-between gap-3">
-                                    <p className="font-medium text-white">
+                                    <p className="truncate text-sm font-medium text-white sm:text-base">
                                       {tvShow.title}
                                     </p>
-                                    <span className="text-xs text-muted-foreground">
+                                    <span className="shrink-0 text-xs text-muted-foreground">
                                       {tvShow.recommendedAge}+
                                     </span>
                                   </div>
+
                                   <p
-                                    className="truncate text-sm leading-6 text-[#d5d0c5]"
+                                    className="line-clamp-2 text-sm leading-6 text-[#d5d0c5]"
                                     title={tvShow.description}
                                   >
                                     {tvShow.description}
@@ -458,14 +478,14 @@ export function ManageWatchlistDetailPage({
                       ) : allTvShowsQuery.isError ? (
                         <div
                           role="alert"
-                          className="rounded-2xl border border-rose-500/20 bg-rose-950/20 px-4 py-4"
+                          className="rounded-[1rem] border border-rose-500/20 bg-rose-950/20 px-4 py-4 sm:rounded-2xl"
                         >
                           <p className="text-sm font-medium text-rose-200">
                             Unable to search TV shows.
                           </p>
                         </div>
                       ) : (
-                        <Empty className="rounded-2xl border border-dashed border-white/10 bg-[#1c1d21] p-8">
+                        <Empty className="rounded-[1rem] border border-dashed border-white/10 bg-[#1c1d21] p-6 sm:rounded-2xl sm:p-8">
                           <EmptyHeader>
                             <EmptyMedia variant="icon">
                               <Search />
@@ -484,49 +504,51 @@ export function ManageWatchlistDetailPage({
                   </CardContent>
                 </Card>
 
-                <Card className="rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                  <CardHeader className="border-b border-white/10 px-6 py-5">
+                <Card className="rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none sm:rounded-3xl">
+                  <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
                     <div className="space-y-2">
-                      <CardTitle className="text-xl font-semibold text-white">
+                      <CardTitle className="text-lg font-semibold text-white sm:text-xl">
                         {watchlist.tvShowKeys.length}{' '}
                         {watchlist.tvShowKeys.length === 1 ? 'title' : 'titles'}
                       </CardTitle>
-                      <p className="text-sm leading-7 text-[#d5d0c5]">
+                      <p className="text-sm leading-6 text-[#d5d0c5] sm:leading-7">
                         Keep this list curated by removing titles that no longer
                         belong here.
                       </p>
                     </div>
                   </CardHeader>
-                  <CardContent className="px-6 py-6">
+
+                  <CardContent className="px-4 py-4 sm:px-6 sm:py-6">
                     {allTvShowsQuery.isLoading ? (
-                      <div className="h-56 rounded-2xl border border-white/10 bg-[#2a2c31]" />
+                      <div className="h-40 rounded-[1rem] border border-white/10 bg-[#2a2c31] sm:h-56 sm:rounded-2xl" />
                     ) : linkedTvShows.length > 0 ? (
-                      <div className="space-y-5">
-                        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#1f2126]">
+                      <div className="space-y-4 sm:space-y-5">
+                        <div className="overflow-hidden rounded-[1rem] border border-white/10 bg-[#1f2126] sm:rounded-2xl">
                           <ul className="divide-y divide-white/10">
                             {paginatedLinkedTvShows.map((tvShow, index) => (
                               <li
                                 key={tvShow.key}
-                                className="px-4 py-4 sm:px-5"
+                                className="px-3 py-3 sm:px-5 sm:py-4"
                               >
-                                <div className="flex items-start gap-4">
-                                  <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c]">
+                                <div className="flex items-start gap-3 sm:gap-4">
+                                  <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#25272c] sm:h-28 sm:w-20">
                                     {tvShow.coverImageUrl ? (
                                       <AppImage
                                         src={tvShow.coverImageUrl}
                                         alt={`${tvShow.title} cover`}
                                         fill
-                                        sizes="80px"
-                                        className="w-full h-full object-cover"
+                                        sizes="(max-width: 640px) 56px, 80px"
+                                        className="h-full w-full object-cover"
                                       />
                                     ) : (
                                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,92,144,0.2),rgba(15,23,42,0.94))]" />
                                     )}
                                   </div>
+
                                   <div className="min-w-0 flex-1 space-y-3">
                                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                       <div className="min-w-0">
-                                        <p className="truncate text-2xl font-semibold text-white">
+                                        <p className="truncate text-base font-semibold text-white sm:text-2xl">
                                           {(safeCurrentItemsPage - 1) *
                                             watchlistItemsPerPage +
                                             index +
@@ -538,9 +560,11 @@ export function ManageWatchlistDetailPage({
                                           {tvShow.recommendedAge}+
                                         </p>
                                       </div>
+
                                       <Button
                                         variant="outline"
                                         size="sm"
+                                        className="w-full sm:w-auto"
                                         onClick={() =>
                                           void handleRemoveTvShow(tvShow)
                                         }
@@ -551,7 +575,7 @@ export function ManageWatchlistDetailPage({
                                     </div>
 
                                     <p
-                                      className="line-clamp-2 text-sm leading-7 text-muted-foreground"
+                                      className="line-clamp-2 text-sm leading-6 text-muted-foreground sm:leading-7"
                                       title={tvShow.description}
                                     >
                                       {tvShow.description}
@@ -568,7 +592,7 @@ export function ManageWatchlistDetailPage({
                             <p className="text-center text-sm text-muted-foreground">
                               Page {safeCurrentItemsPage} of {totalItemsPages}.
                             </p>
-                            <Pagination>
+                            <Pagination className="mx-0 w-full justify-center">
                               <PaginationContent>
                                 <PaginationItem>
                                   <PaginationPrevious
@@ -606,7 +630,7 @@ export function ManageWatchlistDetailPage({
                         ) : null}
                       </div>
                     ) : (
-                      <Empty className="rounded-2xl border border-dashed border-white/10 bg-[#1c1d21] p-10">
+                      <Empty className="rounded-[1rem] border border-dashed border-white/10 bg-[#1c1d21] p-6 sm:rounded-2xl sm:p-10">
                         <EmptyHeader>
                           <EmptyMedia variant="icon">
                             <BookmarkPlus />

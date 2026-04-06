@@ -21,62 +21,73 @@ export function TvShowDeleteDialog({
     <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <DialogContent
         showCloseButton={false}
-        className="w-full max-w-xl rounded-[2rem] border border-white/10 bg-transparent p-0 ring-0 sm:max-w-xl"
+        className="max-h-dvh w-full max-w-full overflow-y-auto rounded-none border border-white/10 bg-transparent p-0 ring-0 sm:max-w-xl sm:rounded-[2rem]"
       >
-        <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none">
-        <CardHeader className="border-b border-white/10 px-6 py-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-3">
-              <div className="inline-flex w-fit rounded-full border border-rose-500/20 bg-rose-950/30 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-rose-200">
-                Destructive action
+        <Card className="w-full rounded-none border border-white/10 bg-card py-0 shadow-none sm:rounded-[2rem]">
+          <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
+            <div className="flex items-start justify-between gap-3 sm:gap-4">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="inline-flex w-fit rounded-full border border-rose-500/20 bg-rose-950/30 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-rose-200 sm:px-3 sm:text-[11px] sm:tracking-[0.22em]">
+                  Destructive action
+                </div>
+
+                <div className="space-y-2">
+                  <CardTitle className="text-lg font-semibold text-white sm:text-2xl">
+                    Delete {tvShow.title}?
+                  </CardTitle>
+
+                  <p className="text-sm leading-6 text-[#d5d0c5] sm:leading-7">
+                    This action removes the title from the editorial catalog.
+                    The blockchain history remains queryable, but the active
+                    asset will be deleted from the workspace.
+                  </p>
+                </div>
               </div>
-              <div className="space-y-2">
-                <CardTitle className="text-2xl font-semibold text-white">
-                  Delete {tvShow.title}?
-                </CardTitle>
-                <p className="text-sm leading-7 text-[#d5d0c5]">
-                  This action removes the title from the editorial catalog. The
-                  blockchain history remains queryable, but the active asset
-                  will be deleted from the workspace.
-                </p>
-              </div>
+
+              <Button variant="ghost" size="icon-sm" onClick={onClose}>
+                <X className="size-4" />
+                <span className="sr-only">Close</span>
+              </Button>
             </div>
-            <Button variant="ghost" size="icon-sm" onClick={onClose}>
-              <X className="size-4" />
-              <span className="sr-only">Close</span>
-            </Button>
-          </div>
-        </CardHeader>
+          </CardHeader>
 
-        <CardContent className="space-y-5 px-6 py-6">
-          <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Asset key
-            </p>
-            <p className="mt-2 break-all text-sm text-[#ebe5d8]">
-              {tvShow.key}
-            </p>
-          </div>
+          <CardContent className="space-y-4 px-4 py-4 sm:space-y-5 sm:px-6 sm:py-6">
+            <div className="rounded-xl border border-white/10 bg-[#2a2c31] px-3 py-3 sm:rounded-2xl sm:px-4 sm:py-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-xs sm:tracking-[0.2em]">
+                Asset key
+              </p>
 
-          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              disabled={isPending}
-              onClick={() => void onConfirm()}
-            >
-              {isPending ? (
-                <LoaderCircle className="size-4 animate-spin" />
-              ) : (
-                <Trash2 className="size-4" />
-              )}
-              <span>Delete TV show</span>
-            </Button>
-          </div>
-        </CardContent>
+              <p className="mt-2 break-all text-sm text-[#ebe5d8]">
+                {tvShow.key}
+              </p>
+            </div>
+
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="button"
+                variant="destructive"
+                disabled={isPending}
+                onClick={() => void onConfirm()}
+                className="w-full sm:w-auto"
+              >
+                {isPending ? (
+                  <LoaderCircle className="size-4 animate-spin" />
+                ) : (
+                  <Trash2 className="size-4" />
+                )}
+                <span>Delete TV show</span>
+              </Button>
+            </div>
+          </CardContent>
         </Card>
       </DialogContent>
     </Dialog>

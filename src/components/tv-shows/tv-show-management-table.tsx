@@ -46,10 +46,18 @@ export function TvShowManagementTable({
           <table className="min-w-full divide-y divide-white/10">
             <thead className="bg-[#2a2c31]">
               <tr className="text-left text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                <th scope="col" className="px-5 py-4 font-medium">TV show</th>
-                <th scope="col" className="px-5 py-4 font-medium">Description</th>
-                <th scope="col" className="px-5 py-4 font-medium">Recommended age</th>
-                <th scope="col" className="px-5 py-4 font-medium">Actions</th>
+                <th scope="col" className="px-5 py-4 font-medium">
+                  TV show
+                </th>
+                <th scope="col" className="px-5 py-4 font-medium">
+                  Description
+                </th>
+                <th scope="col" className="px-5 py-4 font-medium">
+                  Recommended age
+                </th>
+                <th scope="col" className="px-5 py-4 font-medium">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">

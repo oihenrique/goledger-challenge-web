@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { AppImage } from '@/components/shared/app-image';
-import { Button } from '@/components/ui';
 import {
+  Button,
   Card,
   CardContent,
   CardFooter,
@@ -48,33 +48,33 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
         aria-label={`Open public details for ${tvShow.title}`}
         onClick={handleNavigateToTvShow}
         onKeyDown={handleCardKeyDown}
-        className="cursor-pointer rounded-3xl border border-white/10 bg-card py-0 shadow-none ring-0 transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none ring-0 transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:rounded-3xl"
       >
-        <CardHeader className="px-0">
-          <div className="relative h-64 border-b border-white/10 bg-[#2a2c31] overflow-hidden">
+        <CardHeader className="px-0 py-0">
+          <div className="relative aspect-2/3 w-full overflow-hidden border-b border-white/10 bg-[#2a2c31]">
             {tvShow.coverImageUrl ? (
               <AppImage
                 src={tvShow.coverImageUrl}
                 alt={`${tvShow.title} cover`}
                 fill
-                sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-                className="w-full h-full object-cover"
+                sizes="(min-width: 1280px) 16vw, (min-width: 640px) 33vw, 50vw"
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+              <div className="flex h-full w-full items-center justify-center px-4 text-center text-xs text-muted-foreground sm:text-sm">
                 No image available
               </div>
             )}
           </div>
         </CardHeader>
-        <CardContent className="space-y-4 px-3 pb-0">
-          <div className="space-y-3">
-            <CardTitle className="text-base font-semibold text-white">
-              {tvShow.title}
-            </CardTitle>
-          </div>
+
+        <CardContent className="flex-1 space-y-2 px-3 py-3 sm:px-4 sm:py-4">
+          <CardTitle className="line-clamp-2 text-sm font-semibold text-white sm:text-base">
+            {tvShow.title}
+          </CardTitle>
         </CardContent>
-        <CardFooter className="mt-auto grid gap-3 border-t border-white/10 px-5 py-4">
+
+        <CardFooter className="mt-auto grid grid-cols-2 gap-2 border-t border-white/10 px-3 py-3 sm:px-4 sm:py-4">
           <Button
             variant="secondary"
             className="w-full"
@@ -84,8 +84,9 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
             }}
           >
             <Plus className="size-4" />
-            <span>Add</span>
+            <span className="sm:inline">Add</span>
           </Button>
+
           <Button
             variant="outline"
             className="w-full"
@@ -95,13 +96,15 @@ export function TvShowCatalogCard({ tvShow }: TvShowCatalogCardProps) {
             }}
           >
             <Info className="size-4" />
-            <span>Info</span>
+            <span className="sm:inline">Info</span>
           </Button>
         </CardFooter>
       </Card>
+
       {isInfoOpen ? (
         <TvShowInfoModal tvShow={tvShow} onClose={() => setIsInfoOpen(false)} />
       ) : null}
+
       {isWatchlistModalOpen ? (
         <TvShowWatchlistModal
           tvShow={tvShow}

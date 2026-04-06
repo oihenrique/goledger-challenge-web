@@ -75,6 +75,7 @@ export function SeasonFormModal({
   tvShow,
 }: SeasonFormModalProps) {
   const [createAnother, setCreateAnother] = useState(false);
+
   const {
     formState: { errors },
     handleSubmit,
@@ -117,20 +118,22 @@ export function SeasonFormModal({
   return (
     <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <DialogContent
-        showCloseButton={false}
-        className="w-full max-w-xl rounded-[2rem] border border-white/10 bg-transparent p-0 ring-0 sm:max-w-xl"
+        showCloseButton={true}
+        className="max-h-dvh w-full max-w-full overflow-y-auto rounded-none border border-white/10 bg-transparent p-0 ring-0 sm:max-w-xl sm:rounded-[2rem]"
       >
-        <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none">
-          <CardHeader className="border-b border-white/10 px-6 py-5">
-            <div className="space-y-3">
-              <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+        <Card className="w-full rounded-none border border-white/10 bg-card py-0 shadow-none sm:rounded-[2rem]">
+          <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:px-3 sm:text-[11px] sm:tracking-[0.22em]">
                 Season form
               </div>
+
               <div className="space-y-2">
-                <CardTitle className="text-2xl font-semibold text-white">
+                <CardTitle className="text-lg font-semibold text-white sm:text-2xl">
                   {heading}
                 </CardTitle>
-                <p className="max-w-xl text-sm leading-7 text-[#d5d0c5]">
+
+                <p className="max-w-xl text-sm leading-6 text-[#d5d0c5] sm:leading-7">
                   This season will be linked directly to{' '}
                   <span className="font-medium text-white">{tvShow.title}</span>
                   .
@@ -139,19 +142,19 @@ export function SeasonFormModal({
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-5 px-6 py-6">
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <CardContent className="space-y-4 px-4 py-4 sm:space-y-5 sm:px-6 sm:py-6">
+            <div className="rounded-xl border border-white/10 bg-[#2a2c31] px-3 py-3 sm:rounded-2xl sm:px-4 sm:py-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-xs sm:tracking-[0.2em]">
                 TV show context
               </p>
               <p className="mt-2 text-sm text-[#ebe5d8]">{tvShow.title}</p>
             </div>
 
             <form
-              className="space-y-5"
+              className="space-y-4 sm:space-y-5"
               onSubmit={(event) => void handleSubmit(handleFormSubmit)(event)}
             >
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:gap-5 sm:grid-cols-2">
                 <Field>
                   <FieldLabel
                     htmlFor="season-number"
@@ -159,16 +162,21 @@ export function SeasonFormModal({
                   >
                     Season number
                   </FieldLabel>
+
                   <FieldContent>
                     <Input
                       id="season-number"
                       type="number"
                       min={1}
                       aria-invalid={Boolean(errors.number)}
-                      className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                      className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0 sm:h-12 sm:rounded-2xl sm:px-4"
                       {...register('number', { valueAsNumber: true })}
                     />
-                    <FieldError errors={[errors.number]} className="text-rose-200" />
+
+                    <FieldError
+                      errors={[errors.number]}
+                      className="text-rose-200"
+                    />
                   </FieldContent>
                 </Field>
 
@@ -179,6 +187,7 @@ export function SeasonFormModal({
                   >
                     Release year
                   </FieldLabel>
+
                   <FieldContent>
                     <Input
                       id="season-year"
@@ -186,17 +195,24 @@ export function SeasonFormModal({
                       min={1900}
                       max={2100}
                       aria-invalid={Boolean(errors.year)}
-                      className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                      className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0 sm:h-12 sm:rounded-2xl sm:px-4"
                       {...register('year', { valueAsNumber: true })}
                     />
-                    <FieldError errors={[errors.year]} className="text-rose-200" />
+
+                    <FieldError
+                      errors={[errors.year]}
+                      className="text-rose-200"
+                    />
                   </FieldContent>
                 </Field>
               </div>
 
               <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 {mode === 'create' ? (
-                  <Field orientation="horizontal" className="items-center gap-2">
+                  <Field
+                    orientation="horizontal"
+                    className="items-center gap-2"
+                  >
                     <Checkbox
                       id="season-create-another"
                       checked={createAnother}
@@ -205,6 +221,7 @@ export function SeasonFormModal({
                       }
                       className="border-white/20 bg-[#2a2c31] data-checked:border-[#b58d47] data-checked:bg-[#b58d47] data-checked:text-black"
                     />
+
                     <FieldContent>
                       <FieldLabel
                         htmlFor="season-create-another"
@@ -218,14 +235,25 @@ export function SeasonFormModal({
                   <div />
                 )}
 
-                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                  <Button type="button" variant="outline" onClick={onClose}>
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onClose}
+                    className="w-full sm:w-auto"
+                  >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isPending}>
+
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full sm:w-auto"
+                  >
                     {isPending ? (
                       <LoaderCircle className="size-4 animate-spin" />
                     ) : null}
+
                     <span>
                       {mode === 'create' ? 'Create season' : 'Save changes'}
                     </span>

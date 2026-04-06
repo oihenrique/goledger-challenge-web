@@ -187,33 +187,35 @@ export function ManageTvShowsPage() {
     <>
       <PageShell>
         <section
-          className="space-y-8 py-14 sm:py-16"
+          className="space-y-6 py-6 sm:space-y-8 sm:py-16"
           aria-busy={isLoading}
           aria-live="polite"
         >
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+          <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-3 sm:space-y-4">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:text-xs sm:tracking-[0.28em]">
                 Editorial workspace
               </p>
-              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              <h1 className="max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-5xl">
                 Manage TV shows
               </h1>
-              <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
+              <p className="max-w-2xl text-sm leading-6 text-[#d5d0c5] sm:text-base sm:leading-8">
                 Manage the TV shows registered in our catalog. Navigate through
                 our collection, and click on a TV show to edit its details or
                 delete it from the catalog.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button variant="outline" asChild>
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+              <Button variant="outline" className="w-full sm:w-auto" asChild>
                 <Link href="/tv-shows">Open public catalog</Link>
               </Button>
-              <Button onClick={openCreateModal}>Create TV show</Button>
+              <Button className="w-full sm:w-auto" onClick={openCreateModal}>
+                Create TV show
+              </Button>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-card p-4 sm:p-5">
+          <div className="rounded-[1.25rem] border border-white/10 bg-card p-3 sm:rounded-3xl sm:p-5">
             <SearchInputGroup
               id="manage-tv-show-search"
               label="Search"
@@ -229,14 +231,14 @@ export function ManageTvShowsPage() {
             <div
               role="status"
               aria-label="Loading TV show management data"
-              className="h-80 rounded-3xl border border-white/10 bg-card"
+              className="h-48 rounded-[1.25rem] border border-white/10 bg-card sm:h-80 sm:rounded-3xl"
             />
           ) : null}
 
           {isError ? (
             <div
               role="alert"
-              className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6"
+              className="rounded-[1.25rem] border border-rose-500/30 bg-rose-950/20 p-4 sm:rounded-3xl sm:p-6"
             >
               <p className="text-sm font-medium text-rose-200">
                 Unable to load TV show management data.
@@ -252,9 +254,9 @@ export function ManageTvShowsPage() {
           {showEmptyState ? (
             <div
               role="status"
-              className="rounded-3xl border border-white/10 bg-card p-10 text-center"
+              className="rounded-[1.25rem] border border-white/10 bg-card p-6 text-center sm:rounded-3xl sm:p-10"
             >
-              <p className="text-lg font-medium text-white">
+              <p className="text-base font-medium text-white sm:text-lg">
                 No TV shows matched this workspace filter.
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
@@ -265,26 +267,30 @@ export function ManageTvShowsPage() {
           ) : null}
 
           {showCursorEmptyState ? (
-            <div className="space-y-6">
-              <div className="rounded-3xl border border-white/10 bg-card p-10 text-center">
-                <p className="text-lg font-medium text-white">
+            <div className="space-y-5 sm:space-y-6">
+              <div className="rounded-[1.25rem] border border-white/10 bg-card p-6 text-center sm:rounded-3xl sm:p-10">
+                <p className="text-base font-medium text-white sm:text-lg">
                   No more TV shows were returned for this page cursor.
                 </p>
                 <p className="mt-3 text-sm text-muted-foreground">
                   Go back to the previous page or adjust the workspace filter.
                 </p>
-                <div className="mt-6 flex justify-center">
-                  <Button variant="outline" onClick={handlePreviousPage}>
+                <div className="mt-5 flex justify-center sm:mt-6">
+                  <Button
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                    onClick={handlePreviousPage}
+                  >
                     Return to previous page
                   </Button>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Batch {currentPage}. No results.
                 </p>
-                <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+                <Pagination className="mx-0 w-full justify-start sm:w-auto sm:justify-end">
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious
@@ -325,12 +331,12 @@ export function ManageTvShowsPage() {
                 onDelete={openDeleteDialog}
               />
 
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Batch {currentPage}. Showing up to {tvShowsPerPage} titles per
                   workspace request.
                 </p>
-                <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+                <Pagination className="mx-0 w-full justify-start sm:w-auto sm:justify-end">
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious

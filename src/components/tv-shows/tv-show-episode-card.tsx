@@ -17,35 +17,37 @@ export function TvShowEpisodeCard({ episode }: TvShowEpisodeCardProps) {
     : `E${episode.episodeNumber}`;
 
   return (
-    <Card className="rounded-2xl border border-white/10 bg-card py-0 shadow-none transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-      <div className="flex gap-4 p-4">
-        <div className="relative w-64 shrink-0 aspect-video overflow-hidden rounded-xl border border-white/10 bg-[#2a2c31]">
+    <Card className="rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none transition hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:rounded-2xl">
+      <div className="flex flex-col gap-4 p-3 sm:flex-row sm:gap-4 sm:p-4">
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#2a2c31] sm:w-64">
           {episode.episodeImageUrl ? (
             <AppImage
               src={episode.episodeImageUrl}
               alt={`${episode.title} still`}
               fill
-              sizes="256px"
-              className="w-full h-full object-cover"
+              sizes="(max-width: 640px) 100vw, 256px"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
+            <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
               No image
             </div>
           )}
         </div>
 
         <div className="min-w-0 flex-1 space-y-3">
-          <div className="space-y-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs">
               <span className="inline-flex rounded-full border border-white/10 bg-[#25272c] px-2 py-1 text-[#d5d0c5]">
                 {episodeCode}
               </span>
+
               {typeof episode.rating === 'number' && episode.rating > 9 ? (
                 <span className="inline-flex rounded-full border border-[#c59a52]/40 bg-[#c59a52] px-2 py-1 font-medium text-black">
                   Top rated
                 </span>
               ) : null}
+
               {typeof episode.rating === 'number' ? (
                 <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-[#25272c] px-2 py-1 text-[#d5d0c5]">
                   <Star className="size-3 text-[#c59a52]" />
@@ -53,14 +55,15 @@ export function TvShowEpisodeCard({ episode }: TvShowEpisodeCardProps) {
                 </div>
               ) : null}
             </div>
-            <h3 className="text-base font-semibold text-white line-clamp-2">
+
+            <h3 className="line-clamp-2 text-sm font-semibold text-white sm:text-base">
               {episode.title}
             </h3>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#d5d0c5]">
-            <CalendarDays className="size-3.5 text-muted-foreground" />
-            <span>
+          <div className="flex items-center gap-2 text-[11px] text-[#d5d0c5] sm:text-xs">
+            <CalendarDays className="size-3.5 shrink-0 text-muted-foreground" />
+            <span className="min-w-0 truncate">
               {formatTimestamp(episode.releaseDate, {
                 dateStyle: 'medium',
                 timeStyle: undefined,
@@ -68,7 +71,7 @@ export function TvShowEpisodeCard({ episode }: TvShowEpisodeCardProps) {
             </span>
           </div>
 
-          <p className="text-sm text-[#d5d0c5] line-clamp-3 leading-6">
+          <p className="line-clamp-3 text-sm leading-6 text-[#d5d0c5] sm:line-clamp-3">
             {episode.description}
           </p>
         </div>

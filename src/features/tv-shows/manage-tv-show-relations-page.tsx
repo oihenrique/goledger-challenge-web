@@ -350,16 +350,26 @@ export function ManageTvShowRelationsPage({
   return (
     <>
       <PageShell>
-        <section className="space-y-8 py-14 sm:py-16">
-          <div className="flex flex-wrap items-center gap-3">
-            <Button variant="outline" size="sm" asChild>
+        <section className="space-y-6 py-6 sm:space-y-8 sm:py-16">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto"
+              asChild
+            >
               <Link href="/manage/tv-shows">
                 <ChevronLeft className="size-4" />
                 <span>Back to TV shows</span>
               </Link>
             </Button>
             {tvShow ? (
-              <Button variant="outline" size="sm" asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto"
+                asChild
+              >
                 <Link href={`/tv-shows/${encodeURIComponent(tvShow.title)}`}>
                   <span>Open public detail</span>
                 </Link>
@@ -368,17 +378,17 @@ export function ManageTvShowRelationsPage({
           </div>
 
           {tvShowQuery.isLoading ? (
-            <div className="space-y-6">
-              <Skeleton className="h-14 w-1/2 bg-[#31343a]" />
-              <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-                <Skeleton className="h-105 w-full rounded-3xl bg-[#2a2c31]" />
-                <Skeleton className="h-105 w-full rounded-3xl bg-[#2a2c31]" />
+            <div className="space-y-4 sm:space-y-6">
+              <Skeleton className="h-10 w-40 bg-[#31343a] sm:h-14 sm:w-1/2" />
+              <div className="grid gap-4 sm:gap-6 lg:grid-cols-[300px_1fr]">
+                <Skeleton className="h-80 w-full rounded-[1.25rem] bg-[#2a2c31] sm:h-105 sm:rounded-3xl" />
+                <Skeleton className="h-80 w-full rounded-[1.25rem] bg-[#2a2c31] sm:h-105 sm:rounded-3xl" />
               </div>
             </div>
           ) : null}
 
           {tvShowQuery.isError ? (
-            <div className="rounded-3xl border border-rose-500/30 bg-rose-950/20 p-6">
+            <div className="rounded-[1.25rem] border border-rose-500/30 bg-rose-950/20 p-4 sm:rounded-3xl sm:p-6">
               <p className="text-sm font-medium text-rose-200">
                 Unable to load this TV show workspace.
               </p>
@@ -392,12 +402,12 @@ export function ManageTvShowRelationsPage({
 
           {!tvShowQuery.isLoading && !tvShowQuery.isError && tvShow ? (
             <>
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div className="space-y-4">
-                  <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="space-y-3 sm:space-y-4">
+                  <h1 className="max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-5xl">
                     Manage seasons and episodes for {tvShow.title}.
                   </h1>
-                  <p className="max-w-2xl text-base leading-8 text-[#d5d0c5]">
+                  <p className="max-w-2xl text-sm leading-6 text-[#d5d0c5] sm:text-base sm:leading-8">
                     Keep the active TV show context fixed while you organize
                     seasons on the left and manage the selected season episodes
                     on the right.
@@ -405,14 +415,14 @@ export function ManageTvShowRelationsPage({
                 </div>
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
-                <Card className="min-w-0 rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                  <CardHeader className="border-b border-white/10 px-5 py-5">
+              <div className="grid gap-4 sm:gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
+                <Card className="min-w-0 rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none sm:rounded-3xl">
+                  <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-5 sm:py-5">
                     <div className="space-y-3">
-                      <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                      <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:px-3 sm:text-[11px] sm:tracking-[0.22em]">
                         Seasons
                       </div>
-                      <CardTitle className="text-lg font-semibold text-white">
+                      <CardTitle className="text-base font-semibold text-white sm:text-lg">
                         {pageTitle}
                       </CardTitle>
                       <Button
@@ -425,20 +435,20 @@ export function ManageTvShowRelationsPage({
                       </Button>
                     </div>
                   </CardHeader>
-                  <CardContent className="px-4 py-4">
+                  <CardContent className="px-3 py-3 sm:px-4 sm:py-4">
                     {seasonsQuery.isLoading ? (
                       <div className="space-y-3">
                         {Array.from({ length: 5 }).map((_, index) => (
                           <Skeleton
                             key={index}
-                            className="h-16 w-full rounded-2xl bg-[#2a2c31]"
+                            className="h-14 w-full rounded-xl bg-[#2a2c31] sm:h-16 sm:rounded-2xl"
                           />
                         ))}
                       </div>
                     ) : null}
 
                     {seasonsQuery.isError ? (
-                      <div className="rounded-2xl border border-rose-500/20 bg-rose-950/20 px-4 py-4">
+                      <div className="rounded-xl border border-rose-500/20 bg-rose-950/20 px-4 py-4 sm:rounded-2xl">
                         <p className="text-sm font-medium text-rose-200">
                           Unable to load seasons.
                         </p>
@@ -453,7 +463,7 @@ export function ManageTvShowRelationsPage({
                     {!seasonsQuery.isLoading &&
                     !seasonsQuery.isError &&
                     seasons.length === 0 ? (
-                      <Empty className="rounded-2xl border border-dashed border-white/10 bg-[#1c1d21] p-8">
+                      <Empty className="rounded-xl border border-dashed border-white/10 bg-[#1c1d21] p-6 sm:rounded-2xl sm:p-8">
                         <EmptyHeader>
                           <EmptyMedia variant="icon">
                             <Layers2 />
@@ -467,7 +477,10 @@ export function ManageTvShowRelationsPage({
                           </EmptyDescription>
                         </EmptyHeader>
                         <EmptyContent>
-                          <Button onClick={openCreateSeasonModal}>
+                          <Button
+                            className="w-full sm:w-auto"
+                            onClick={openCreateSeasonModal}
+                          >
                             <Plus className="size-4" />
                             <span>Create season</span>
                           </Button>
@@ -489,7 +502,7 @@ export function ManageTvShowRelationsPage({
                               aria-pressed={isActive}
                               aria-label={`Select season ${season.number}`}
                               onClick={() => handleSeasonSelection(season.key)}
-                              className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
+                              className={`w-full rounded-xl border px-3 py-3 text-left transition sm:rounded-2xl sm:px-4 sm:py-4 ${
                                 isActive
                                   ? 'border-[#7c6135] bg-[#2a2c31]'
                                   : 'border-white/10 bg-[#1c1d21] hover:bg-[#2a2c31]'
@@ -497,7 +510,7 @@ export function ManageTvShowRelationsPage({
                             >
                               <div className="flex items-center justify-between gap-3">
                                 <div>
-                                  <p className="text-sm font-medium text-white">
+                                  <p className="text-sm font-medium text-white sm:text-base">
                                     Season {season.number}
                                   </p>
                                   <p className="mt-1 text-xs text-muted-foreground">
@@ -518,13 +531,13 @@ export function ManageTvShowRelationsPage({
                   </CardContent>
                 </Card>
 
-                <div className="min-w-0 space-y-6">
+                <div className="min-w-0 space-y-4 sm:space-y-6">
                   {!selectedSeason &&
                   !seasonsQuery.isLoading &&
                   !seasonsQuery.isError ? (
-                    <Card className="min-w-0 rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                      <CardContent className="px-6 py-10">
-                        <Empty className="rounded-2xl border border-dashed border-white/10 bg-[#1c1d21] p-10">
+                    <Card className="min-w-0 rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none sm:rounded-3xl">
+                      <CardContent className="px-4 py-6 sm:px-6 sm:py-10">
+                        <Empty className="rounded-xl border border-dashed border-white/10 bg-[#1c1d21] p-6 sm:rounded-2xl sm:p-10">
                           <EmptyHeader>
                             <EmptyMedia variant="icon">
                               <Film />
@@ -538,7 +551,10 @@ export function ManageTvShowRelationsPage({
                             </EmptyDescription>
                           </EmptyHeader>
                           <EmptyContent>
-                            <Button onClick={openCreateSeasonModal}>
+                            <Button
+                              className="w-full sm:w-auto"
+                              onClick={openCreateSeasonModal}
+                            >
                               <Plus className="size-4" />
                               <span>Create season</span>
                             </Button>
@@ -549,28 +565,30 @@ export function ManageTvShowRelationsPage({
                   ) : null}
 
                   {selectedSeason ? (
-                    <Card className="min-w-0 rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                      <CardHeader className="border-b border-white/10 px-6 py-5">
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <Card className="min-w-0 rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none sm:rounded-3xl">
+                      <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
+                        <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-start lg:justify-between">
                           <div className="space-y-3">
-                            <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                            <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:px-3 sm:text-[11px] sm:tracking-[0.22em]">
                               Active season
                             </div>
                             <div className="space-y-2">
-                              <CardTitle className="text-2xl font-semibold text-white">
+                              <CardTitle className="text-xl font-semibold text-white sm:text-2xl">
                                 Season {selectedSeason.number}
                               </CardTitle>
                             </div>
                           </div>
-                          <div className="flex flex-wrap gap-3">
+                          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
                             <Button
                               variant="outline"
+                              className="w-full sm:w-auto"
                               onClick={() => setSeasonInDetails(selectedSeason)}
                             >
                               Details
                             </Button>
                             <Button
                               variant="outline"
+                              className="w-full sm:w-auto"
                               onClick={() =>
                                 openEditSeasonModal(selectedSeason)
                               }
@@ -579,6 +597,7 @@ export function ManageTvShowRelationsPage({
                             </Button>
                             <Button
                               variant="destructive"
+                              className="w-full sm:w-auto"
                               onClick={() =>
                                 setSeasonPendingDeletion(selectedSeason)
                               }
@@ -592,15 +611,18 @@ export function ManageTvShowRelationsPage({
                   ) : null}
 
                   {selectedSeason ? (
-                    <Card className="min-w-0 rounded-3xl border border-white/10 bg-card py-0 shadow-none">
-                      <CardHeader className="border-b border-white/10 px-6 py-5">
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <Card className="min-w-0 rounded-[1.25rem] border border-white/10 bg-card py-0 shadow-none sm:rounded-3xl">
+                      <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between lg:flex-row lg:items-start lg:justify-between">
                           <div className="space-y-3">
-                            <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                            <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:px-3 sm:text-[11px] sm:tracking-[0.22em]">
                               Episodes
                             </div>
                           </div>
-                          <Button onClick={openCreateEpisodeModal}>
+                          <Button
+                            className="w-full sm:w-auto"
+                            onClick={openCreateEpisodeModal}
+                          >
                             <Plus className="size-4" />
                             <span>Create episode</span>
                           </Button>
@@ -608,19 +630,19 @@ export function ManageTvShowRelationsPage({
                       </CardHeader>
                       <CardContent className="px-0 py-0">
                         {episodesQuery.isLoading ? (
-                          <div className="space-y-3 px-6 py-6">
+                          <div className="space-y-3 px-4 py-4 sm:px-6 sm:py-6">
                             {Array.from({ length: 5 }).map((_, index) => (
                               <Skeleton
                                 key={index}
-                                className="h-14 w-full rounded-2xl bg-[#2a2c31]"
+                                className="h-12 w-full rounded-xl bg-[#2a2c31] sm:h-14 sm:rounded-2xl"
                               />
                             ))}
                           </div>
                         ) : null}
 
                         {episodesQuery.isError ? (
-                          <div className="px-6 py-6">
-                            <div className="rounded-2xl border border-rose-500/20 bg-rose-950/20 px-4 py-4">
+                          <div className="px-4 py-4 sm:px-6 sm:py-6">
+                            <div className="rounded-xl border border-rose-500/20 bg-rose-950/20 px-4 py-4 sm:rounded-2xl">
                               <p className="text-sm font-medium text-rose-200">
                                 Unable to load episodes for this season.
                               </p>
@@ -634,8 +656,8 @@ export function ManageTvShowRelationsPage({
                         ) : null}
 
                         {showEpisodeEmptyState ? (
-                          <div className="px-6 py-6">
-                            <Empty className="rounded-2xl border border-dashed border-white/10 bg-[#1c1d21] p-10">
+                          <div className="px-4 py-4 sm:px-6 sm:py-6">
+                            <Empty className="rounded-xl border border-dashed border-white/10 bg-[#1c1d21] p-6 sm:rounded-2xl sm:p-10">
                               <EmptyHeader>
                                 <EmptyMedia variant="icon">
                                   <Video />
@@ -649,7 +671,10 @@ export function ManageTvShowRelationsPage({
                                 </EmptyDescription>
                               </EmptyHeader>
                               <EmptyContent>
-                                <Button onClick={openCreateEpisodeModal}>
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  onClick={openCreateEpisodeModal}
+                                >
                                   <Plus className="size-4" />
                                   <span>Create episode</span>
                                 </Button>
@@ -663,36 +688,36 @@ export function ManageTvShowRelationsPage({
                         episodes.length > 0 ? (
                           <div className="space-y-4">
                             <div className="overflow-x-auto">
-                              <table className="min-w-full divide-y divide-white/10">
+                              <table className="min-w-180 divide-y divide-white/10 sm:min-w-full">
                                 <thead className="bg-[#2a2c31]">
-                                  <tr className="text-left text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                                  <tr className="text-left text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-xs sm:tracking-[0.2em]">
                                     <th
                                       scope="col"
-                                      className="px-5 py-4 font-medium"
+                                      className="px-3 py-3 font-medium sm:px-5 sm:py-4"
                                     >
                                       Episode
                                     </th>
                                     <th
                                       scope="col"
-                                      className="px-5 py-4 font-medium"
+                                      className="px-3 py-3 font-medium sm:px-5 sm:py-4"
                                     >
                                       Description
                                     </th>
                                     <th
                                       scope="col"
-                                      className="px-5 py-4 font-medium"
+                                      className="px-3 py-3 font-medium sm:px-5 sm:py-4"
                                     >
                                       Release date
                                     </th>
                                     <th
                                       scope="col"
-                                      className="px-5 py-4 font-medium"
+                                      className="px-3 py-3 font-medium sm:px-5 sm:py-4"
                                     >
                                       Rating
                                     </th>
                                     <th
                                       scope="col"
-                                      className="px-5 py-4 font-medium"
+                                      className="px-3 py-3 font-medium sm:px-5 sm:py-4"
                                     >
                                       Actions
                                     </th>
@@ -718,35 +743,35 @@ export function ManageTvShowRelationsPage({
                                       }}
                                       className="cursor-pointer align-top transition hover:bg-white/5 focus-visible:bg-white/5 focus-visible:outline-none"
                                     >
-                                      <td className="px-5 py-4">
-                                        <div className="space-y-2">
-                                          <p className="font-medium text-white">
+                                      <td className="px-3 py-3 sm:px-5 sm:py-4">
+                                        <div className="space-y-1.5 sm:space-y-2">
+                                          <p className="text-sm font-medium text-white sm:text-base">
                                             Episode {episode.episodeNumber}
                                           </p>
                                           <div
-                                            className="max-w-35 truncate text-sm text-[#d5d0c5]"
+                                            className="max-w-28 truncate text-xs text-[#d5d0c5] sm:max-w-35 sm:text-sm"
                                             title={episode.title}
                                           >
                                             {episode.title}
                                           </div>
                                         </div>
                                       </td>
-                                      <td className="px-5 py-4">
+                                      <td className="px-3 py-3 sm:px-5 sm:py-4">
                                         <div
-                                          className="max-w-40 truncate text-sm leading-6 text-muted-foreground"
+                                          className="max-w-45 truncate text-xs leading-5 text-muted-foreground sm:max-w-40 sm:text-sm sm:leading-6"
                                           title={episode.description}
                                         >
                                           {episode.description}
                                         </div>
                                       </td>
-                                      <td className="px-5 py-4 text-sm text-[#d5d0c5]">
+                                      <td className="px-3 py-3 text-xs text-[#d5d0c5] sm:px-5 sm:py-4 sm:text-sm">
                                         {formatDate(episode.releaseDate)}
                                       </td>
-                                      <td className="px-5 py-4 text-sm text-[#d5d0c5]">
+                                      <td className="px-3 py-3 text-xs text-[#d5d0c5] sm:px-5 sm:py-4 sm:text-sm">
                                         {episode.rating ?? '—'}
                                       </td>
-                                      <td className="min-w-45 px-5 py-4 whitespace-nowrap">
-                                        <div className="flex flex-wrap items-center gap-2">
+                                      <td className="min-w-45 whitespace-nowrap px-3 py-3 sm:min-w-45 sm:px-5 sm:py-4">
+                                        <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
                                           <Button
                                             variant="outline"
                                             size="sm"
@@ -776,12 +801,12 @@ export function ManageTvShowRelationsPage({
                                 </tbody>
                               </table>
                             </div>
-                            <div className="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex flex-col gap-3 px-4 pb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pb-6">
                               <p className="text-sm text-muted-foreground">
                                 Page {safeCurrentEpisodePage} of{' '}
                                 {totalEpisodePages}.
                               </p>
-                              <Pagination className="mx-0 w-auto justify-start sm:justify-end">
+                              <Pagination className="mx-0 w-full justify-start sm:w-auto sm:justify-end">
                                 <PaginationContent>
                                   <PaginationItem>
                                     <PaginationPrevious

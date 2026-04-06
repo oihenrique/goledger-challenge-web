@@ -19,76 +19,69 @@ export function TvShowInfoModal({ onClose, tvShow }: TvShowInfoModalProps) {
   return (
     <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <DialogContent
-        showCloseButton={false}
-        className="w-full max-w-3xl rounded-[2rem] border border-white/10 bg-transparent p-0 ring-0 sm:max-w-3xl"
+        showCloseButton={true}
+        className="w-full max-w-full rounded-none border-none bg-transparent p-0 max-h-dvh overflow-y-auto sm:max-w-3xl sm:rounded-[2rem]"
       >
-        <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none ring-0">
-          <CardHeader className="border-b border-white/10 px-6 py-5">
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-3">
-                <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+        <Card className="w-full rounded-none border border-white/10 bg-card py-0 shadow-none sm:rounded-[2rem]">
+          {/* HEADER */}
+          <CardHeader className="px-4 py-3 sm:px-6 sm:py-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-2">
+                <div className="inline-flex w-fit rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:px-3 sm:py-1 sm:text-[11px] sm:tracking-[0.22em]">
                   TV Show preview
                 </div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <CardTitle className="text-2xl font-semibold text-white">
-                    {tvShow.title}
-                  </CardTitle>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href={createTvShowHref(tvShow.title)}>
-                      <ExternalLink className="size-4" />
-                      <span>Open page</span>
-                    </Link>
-                  </Button>
-                </div>
+
+                <CardTitle className="text-lg font-semibold text-white sm:text-2xl">
+                  {tvShow.title}
+                </CardTitle>
               </div>
+
               <Button variant="ghost" size="icon-sm" onClick={onClose}>
                 <X className="size-4" />
                 <span className="sr-only">Close</span>
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="grid gap-6 px-6 py-6 lg:grid-cols-[0.7fr_1fr]">
-            <div className="min-h-72 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#2a2c31]">
+
+          {/* CONTENT */}
+          <CardContent className="space-y-5 px-4 py-4 sm:grid sm:gap-6 sm:px-6 sm:py-6 lg:grid-cols-[0.7fr_1fr]">
+            {/* IMAGE */}
+            <div className="relative h-44 w-full overflow-hidden rounded-xl border border-white/10 bg-[#2a2c31] sm:h-auto sm:aspect-2/3 sm:rounded-[1.5rem]">
               {tvShow.coverImageUrl ? (
                 <AppImage
                   src={tvShow.coverImageUrl}
                   alt={`${tvShow.title} cover`}
                   fill
                   sizes="(min-width: 1024px) 30vw, 100vw"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full min-h-72 flex-col justify-between bg-[linear-gradient(180deg,rgba(42,44,49,0.24),rgba(15,23,42,0.92))] p-5">
-                  <div className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                    TV show artwork
-                  </div>
-                  <div className="space-y-3">
-                    <p className="text-lg font-medium text-white">
-                      {tvShow.title}
-                    </p>
-                    <p className="text-sm leading-7 text-[#d5d0c5]">
-                      Visual space reserved for future catalog imagery and
-                      richer editorial art direction.
-                    </p>
-                  </div>
+                <div className="flex h-full w-full items-center justify-center px-4 text-center text-xs text-muted-foreground sm:text-sm">
+                  No image available
                 </div>
               )}
             </div>
-            <div className="space-y-5">
-              <div className="flex flex-wrap gap-2 text-sm text-[#d5d0c5]">
-                <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-3 py-1">
+
+            {/* TEXT CONTENT */}
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex flex-wrap gap-2 text-xs text-[#d5d0c5] sm:text-sm">
+                <div className="inline-flex rounded-full border border-white/10 bg-[#2a2c31] px-2.5 py-1 sm:px-3 sm:py-1">
                   Recommended age: {tvShow.recommendedAge}+
                 </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground">
+
+              <div className="space-y-2 sm:space-y-3">
+                <h3 className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:text-sm sm:tracking-[0.22em]">
                   Synopsis
                 </h3>
-                <p className="text-base leading-8 text-[#d5d0c5]">
+
+                <p className="text-sm leading-6 text-[#d5d0c5] sm:text-base sm:leading-8">
                   {tvShow.description}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+
+              {/* CTA */}
+              <div className="pt-2">
                 <Button variant="outline" className="w-full sm:w-auto" asChild>
                   <Link href={createTvShowHref(tvShow.title)}>
                     <ExternalLink className="size-4" />

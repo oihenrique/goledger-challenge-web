@@ -87,6 +87,7 @@ export function EpisodeFormModal({
   tvShow,
 }: EpisodeFormModalProps) {
   const [createAnother, setCreateAnother] = useState(false);
+
   const {
     formState: { errors },
     handleSubmit,
@@ -104,9 +105,7 @@ export function EpisodeFormModal({
   async function handleFormSubmit(values: EpisodeFormValues) {
     const releaseDate = toIsoDateTimeFromDateInput(values.releaseDate);
 
-    if (!releaseDate) {
-      return;
-    }
+    if (!releaseDate) return;
 
     const payload: CreateEpisodeInput | UpdateEpisodeInput = {
       '@assetType': assetTypes.episodes,
@@ -133,33 +132,29 @@ export function EpisodeFormModal({
   return (
     <Dialog open onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <DialogContent
-        showCloseButton={false}
-        className="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-transparent p-0 ring-0 sm:max-w-2xl"
+        showCloseButton={true}
+        className="max-h-dvh w-full max-w-full overflow-y-auto rounded-none border border-white/10 bg-transparent p-0 ring-0 sm:max-w-2xl sm:rounded-[2rem]"
       >
-        <Card className="w-full rounded-[2rem] border border-white/10 bg-card py-0 shadow-none">
-          <CardHeader className="border-b border-white/10 px-6 py-5">
+        <Card className="w-full rounded-none border border-white/10 bg-card py-0 shadow-none sm:rounded-[2rem]">
+          <CardHeader className="border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5">
             <div className="space-y-3">
-              <div className="space-y-2">
-                <CardTitle className="text-2xl font-semibold text-white">
-                  {mode === 'create'
-                    ? `Create episode for season ${season.number}`
-                    : `Edit episode ${episode?.episodeNumber ?? ''}`}
-                </CardTitle>
-                <p className="max-w-xl text-sm leading-7 text-[#d5d0c5]">
-                  This episode will stay inside season{' '}
-                  <span className="font-medium text-white">
-                    {season.number}
-                  </span>{' '}
-                  of{' '}
-                  <span className="font-medium text-white">{tvShow.title}</span>
-                  .
-                </p>
-              </div>
+              <CardTitle className="text-lg font-semibold text-white sm:text-2xl">
+                {mode === 'create'
+                  ? `Create episode for season ${season.number}`
+                  : `Edit episode ${episode?.episodeNumber ?? ''}`}
+              </CardTitle>
+
+              <p className="max-w-xl text-sm leading-6 text-[#d5d0c5] sm:leading-7">
+                This episode will stay inside season{' '}
+                <span className="font-medium text-white">{season.number}</span>{' '}
+                of{' '}
+                <span className="font-medium text-white">{tvShow.title}</span>.
+              </p>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-5 px-6 py-6">
-            <div className="rounded-2xl border border-white/10 bg-[#2a2c31] px-4 py-4">
+          <CardContent className="space-y-4 px-4 py-4 sm:space-y-5 sm:px-6 sm:py-6">
+            <div className="rounded-xl border border-white/10 bg-[#2a2c31] px-3 py-3 sm:rounded-2xl sm:px-4 sm:py-4">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 Active context
               </p>
@@ -169,10 +164,10 @@ export function EpisodeFormModal({
             </div>
 
             <form
-              className="space-y-5"
+              className="space-y-4 sm:space-y-5"
               onSubmit={(event) => void handleSubmit(handleFormSubmit)(event)}
             >
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:gap-5 sm:grid-cols-2">
                 <Field>
                   <FieldLabel
                     htmlFor="episode-number"
@@ -186,13 +181,10 @@ export function EpisodeFormModal({
                       type="number"
                       min={1}
                       aria-invalid={Boolean(errors.episodeNumber)}
-                      className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                      className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0 sm:h-12 sm:rounded-2xl sm:px-4"
                       {...register('episodeNumber', { valueAsNumber: true })}
                     />
-                    <FieldError
-                      errors={[errors.episodeNumber]}
-                      className="text-rose-200"
-                    />
+                    <FieldError errors={[errors.episodeNumber]} />
                   </FieldContent>
                 </Field>
 
@@ -211,46 +203,32 @@ export function EpisodeFormModal({
                       max={10}
                       step="0.1"
                       aria-invalid={Boolean(errors.rating)}
-                      className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                      className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0 sm:h-12 sm:rounded-2xl sm:px-4"
                       {...register('rating', {
                         setValueAs: (value) =>
                           value === '' ? undefined : Number(value),
                       })}
                     />
-                    <FieldError
-                      errors={[errors.rating]}
-                      className="text-rose-200"
-                    />
+                    <FieldError errors={[errors.rating]} />
                   </FieldContent>
                 </Field>
               </div>
 
               <Field>
-                <FieldLabel
-                  htmlFor="episode-title"
-                  className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
-                >
-                  Title
-                </FieldLabel>
+                <FieldLabel htmlFor="episode-title">Title</FieldLabel>
                 <FieldContent>
                   <Input
                     id="episode-title"
                     aria-invalid={Boolean(errors.title)}
-                    className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                    className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white sm:h-12 sm:rounded-2xl sm:px-4"
                     {...register('title')}
                   />
-                  <FieldError
-                    errors={[errors.title]}
-                    className="text-rose-200"
-                  />
+                  <FieldError errors={[errors.title]} />
                 </FieldContent>
               </Field>
 
               <Field>
-                <FieldLabel
-                  htmlFor="episode-release-date"
-                  className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
-                >
+                <FieldLabel htmlFor="episode-release-date">
                   Release date
                 </FieldLabel>
                 <FieldContent>
@@ -258,35 +236,26 @@ export function EpisodeFormModal({
                     id="episode-release-date"
                     type="date"
                     aria-invalid={Boolean(errors.releaseDate)}
-                    className="h-12 rounded-2xl border-white/10 bg-[#2a2c31] px-4 text-sm text-white placeholder:text-muted-foreground focus-visible:border-[#7c6135] focus-visible:ring-0"
+                    className="h-10 rounded-xl border-white/10 bg-[#2a2c31] px-3 text-sm text-white sm:h-12 sm:rounded-2xl sm:px-4"
                     {...register('releaseDate')}
                   />
-                  <FieldError
-                    errors={[errors.releaseDate]}
-                    className="text-rose-200"
-                  />
+                  <FieldError errors={[errors.releaseDate]} />
                 </FieldContent>
               </Field>
 
               <Field>
-                <FieldLabel
-                  htmlFor="episode-description"
-                  className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
-                >
+                <FieldLabel htmlFor="episode-description">
                   Description
                 </FieldLabel>
                 <FieldContent>
                   <textarea
                     id="episode-description"
-                    rows={5}
+                    rows={4}
                     aria-invalid={Boolean(errors.description)}
-                    className="w-full rounded-[1.4rem] border border-white/10 bg-[#2a2c31] px-4 py-3 text-sm leading-7 text-white outline-none transition placeholder:text-muted-foreground focus:border-[#7c6135] aria-invalid:border-destructive"
+                    className="w-full rounded-xl border border-white/10 bg-[#2a2c31] px-3 py-2 text-sm leading-6 text-white sm:rounded-[1.4rem] sm:px-4 sm:py-3 sm:leading-7"
                     {...register('description')}
                   />
-                  <FieldError
-                    errors={[errors.description]}
-                    className="text-rose-200"
-                  />
+                  <FieldError errors={[errors.description]} />
                 </FieldContent>
               </Field>
 
@@ -302,7 +271,6 @@ export function EpisodeFormModal({
                       onCheckedChange={(checked) =>
                         setCreateAnother(checked === true)
                       }
-                      className="border-white/20 bg-[#2a2c31] data-checked:border-[#b58d47] data-checked:bg-[#b58d47] data-checked:text-black"
                     />
                     <FieldContent>
                       <FieldLabel
@@ -317,11 +285,21 @@ export function EpisodeFormModal({
                   <div />
                 )}
 
-                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                  <Button type="button" variant="outline" onClick={onClose}>
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onClose}
+                    className="w-full sm:w-auto"
+                  >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isPending}>
+
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full sm:w-auto"
+                  >
                     {isPending ? (
                       <LoaderCircle className="size-4 animate-spin" />
                     ) : null}
